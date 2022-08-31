@@ -1,0 +1,156 @@
+---
+title: "wk 1: vocab and linear algebra"
+format: html
+---
+
+"A good model is one that accurately predicts the outcome."
+
+Learning primer:
+
+On types of data:
+
+    - Unstructured data does not follow any rhyme or reason
+    - Semi-structured has some consitency, but no precise structure
+    - Structured data has persistent order
+
+On model outputs: 
+
+    - Quantitative data can be measured (numeric)
+    - Qualitative data is descriptive (categorical) but qualitatative
+
+On types of model:
+
+    - Supervised learning is labeled data
+        - Some issues in supervised learning could be overfitting
+    - Unsupervised learning is unlabeled data
+        - Some issues could be know
+
+matricies: rectangular array,
+size (row, column)
+special <3 for SQUARE (n,n) matricies
+
+$$
+A=[a_{ij}]
+$$ 
+(the entry on row i and column j of matrix A)
+
+if $A$ and $B$ are the same size, 
+
+$A + B$
+
+$B - B$
+
+$cA + rB$ <- this is also called a linear combination of A and B
+
+$$A = \begin{bmatrix}
+1 & -1 & 1\\
+0 & 2 & 4
+\end{bmatrix}
+$$
+
+```{python}
+A = [[1,-1,1],[0,2,4]]
+B = [[2,-10,7], [3,8,6]]
+
+A+2*B # okay, this actually doesn't work
+```
+
+
+```{r}
+matrix1 <- matrix(c(3, 9, -1, 4, 2, 6), nrow = 2)
+matrix2 <- matrix(c(5, 2, 0, 9, 3, 4), nrow = 2)
+
+matrix1*matrix2 # OKAY THIS DOESNT WORK EITHER
+```
+
+# Matrix multiplication
+dot product result is ALWAYS A NUMBER
+    - use dot product to create matrix multiplication
+
+Notation:
+
+- Quantitative output: Y
+- Qualitative output: G
+- Matrix: **A**
+
+Linear Models:
+    - you would use regression for numerical
+    - you would use classification for 
+
+$$
+y = mx+b
+$$
+
+where x = input
+      y = output
+      w = $\begin{bmatrix} m \\ b \end{bmatrix}$
+
+goal is to make the line of best fit of the weights
+
+Given input vector $X^T = (X_1, X_2, ..., X_p)$ we predict $Y$ by 
+$$
+\hat{Y}= \hat{B} + (X_1\hat{B_1}+ X_1\hat{B_2} + ... + X_p\hat{B_p})
+$$
+$$
+\hat{Y}= \sum_{j=1}^PX_j\hat{B_j}
+$$
+where $\hat{B_j} $ is the intercept.
+
+If you have a vector $X=\begin{bmatrix}X_1 \\ X_2 \\ ... \\ X_p\end{bmatrix}$
+
+linear model is 
+$$
+f(x) = X^T\hat{B}
+$$
+
+but many different techniques to have flavors of linear modesl
+
+$$
+Error = y - \hat{Y}
+$$
+
+How to tell if your model is doing well:
+
+_Residual sum square of errors and least square_
+we pick coefficients (weights), $\hat{B}$ to minimize the RSS
+
+$$
+RSS(\hat{B})= \sum_{j=1}^N(y_j-x_j^T\hat{B})^2
+$$
+
+
+Simple linear regression:
+
+$$
+Y = \beta_0 + \beta_1X + \epsilon
+$$
+
+where $\beta_0$ and $\beta_1$ are unknown
+
+$$
+\hat{y}=\hat{B_0} + \hat{B_1}x
+$$
+
+$$
+\hat{y_i}=\hat{B_0} + \hat{B_1}x_i 
+$$
+
+(is the prediction of Y based on x_i)
+
+$$
+e_i = y_i - \hat{y_i}
+$$
+
+:::{.callout-important}
+where $y_i$ is actual and $\hat{y_i}$ is predicted
+:::
+
+The least sqaure is 
+
+$$
+\hat{\beta_1} = \frac{\sum_{j=1}^N[(x_i-\bar{x})(y_i-\bar{y})]}{\sum_{i=1}^N(x_i-\bar{x})^2}
+$$
+
+$$
+\hat{\beta_0} = \bar{y}-\hat{\beta_1}\bar{x}
+$$

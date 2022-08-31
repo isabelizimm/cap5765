@@ -1,0 +1,18 @@
+---
+title: "isabel zimmerman"
+about:
+  template: trestles
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/isabelizimm
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/in/isabel-zimmerman
+    - icon: github
+      text: Github
+      href: https://github.com/isabelizimm
+
+---
+
+Just posting my silly little notes about computational data analysis!

@@ -1,0 +1,128 @@
+---
+format: html
+title: "week 2 linear regression"
+---
+
+# Linear regression
+
+Linear regression is a fabulous place to start with statistical learning. The math is (relatively) simple, but it can feel like there's a lot of moving parts if you're new to all this. In general, we want to know 3 things this week about linear regression: [create the best line possible](#create-the-line), [assess the coefficients](#assess-coefficient-estimates) and [know if we did a good job](#assessing-overall-accuracy-of-the-model).
+
+![](https://miro.medium.com/max/1400/1*N1-K-A43_98pYZ27fnupDA.jpeg)
+
+## Create the line
+
+The formula for least squares is:
+
+$$
+Y \approx \beta_0 + \beta_1X
+$$
+
+So we want to calculate out two things: $\beta_0$ (intercept) and $\beta_1$ (slope).
+
+Here are the formulas:
+$$
+\hat{\beta_1} = \frac{\sum_{j=1}^N[(x_i-\bar{x})(y_i-\bar{y})]}{\sum_{i=1}^N(x_i-\bar{x})^2}
+$$
+
+$$
+\hat{\beta_0} = \bar{y}-\hat{\beta_1}\bar{x}
+$$
+
+:::{.callout-tip}
+This course involves a lot of math, and variables. It's hard to keep them straight if you're not used to looking at a lot of statistics.
+
+Bars ($\bar{x}$) are for means. Think of 😐 being a mean face.
+
+Hats ($\hat{x}$) are for estimated numbers. Think of $\hat{y}_0$ as wearing a hat to cosplay as their best guess of what $y_0$ looks like 🤠 (sometimes y is not very good at cosplaying).
+:::
+
+These equations really involve just plugging in numbers, which our program is mostly going to do, so let's not be too concerned with this right now.
+
+## Assess coefficient estimates
+
+Rounding up a few key points:
+
+ - The difference between $\hat{y}_i$ and $y_i$ is $e_1$. This is the distance between the actual data point and our model.
+
+One way to know how well our coefficients might perform is finding the standard error of an estimator to see how it varies under repeated sampling.
+
+$$
+SE(\hat{\beta}_1)^2 = \frac{\theta^2}{\sum_{i=1}^n(x_i-\bar{x})^2}
+$$
+
+
+$$
+SE(\hat{\beta}_0)^2 = \sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i-\bar{x})^2]}
+$$
+
+:::{.callout-tip}
+Standard error has a reverse relation with number of training set.
+
+Noise in the data affects errors in all coefficients, and is directly proportional. (ie, 4x as much data will tend to reduce standard error by 2)
+:::
+
+Residual Standard Error = $\sqrt{-\frac{RSS}{n-2}}$ 
+
+Looking at RSE, it intuitively makes sense. We have the sum of squared residuals, so we need to square root to get back to just regular ol' residuals. We also need to divide by *something* to account for the degrees of freedom, thus $n-2$. [Interested in why we divide by 2?](https://stats.stackexchange.com/questions/204238/why-divide-rss-by-n-2-to-get-rse) (tldr; residual degrees of freedom.)
+
+CONFIDENCE INTERVAL $\hat{B_1} \pm 2SE(\hat{B_1})$
+
+What is a confidence interval tho?
+_values that with 95% probability, the range will contain the true unknown value_
+
+Here's a thread to help understand:
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Hey Stats folk, what&#39;s your 280 character definition of a confidence interval?🤔</p>&mdash; Chelsea Parlett-Pelleriti (@ChelseaParlett) <a href="https://twitter.com/ChelseaParlett/status/973657698536366080?ref_src=twsrc%5Etfw">March 13, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+## Hypothesis testing
+
+$H_0:$ There is no relation between X and Y, that is $H_0:\beta_1=0$
+$H_A:$ There is some relationship between X and Y, that is $H_A:\beta_1\ne0$ 
+
+if $\beta_1 = 0$, 
+
+to test null, we do a $t$ statistic: 
+
+$$
+t = \frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
+$$
+
+:::{.callout-tip}
+what is a p-value?
+:::
+
+a small p-value is good-- it means our model is accurate
+
+a small p-value means we REJECT the NULL hypotheses, that is, there is SOME RELATION between X and Y
+
+having a large p-value-- less likely there is a relation between X and Y
+
+## Assessing overall accuracy of the model
+
+RSE is used to either estimate the STANDARD ERROR of $\beta_x$ OR the accuracy of the overall model
+
+$ R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS} $ for how much variance is explained
+
+we have [RSS](#important-functions) and TSS = \sum_{i=1}^n(x_0-)
+
+## Important functions
+
+$$
+SE(\hat{\beta}_1)^2 = \frac{\theta^2}{\sum_{i=1}^n(x_i-\bar{x})^2}$
+$$
+
+$$
+SE(\hat{\beta}_0)^2 = \sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i-\bar{x})^2]}
+$$
+
+$$
+t = \frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
+$$
+
+$$
+R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS}
+$$
+
+$$
+RSE = \sqrt{-\frac{RSS}{n-2}}
+$$
