@@ -1,5 +1,5 @@
 ---
-title: "isabel zimmerman"
+title: "iz"
 about:
   template: trestles
   links:
@@ -16,3 +16,8 @@ about:
 ---
 
 Just posting my silly little notes about computational data analysis!
+
+---
+cheers,
+
+isabel zimmerman
