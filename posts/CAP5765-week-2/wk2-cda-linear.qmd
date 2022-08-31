@@ -1,6 +1,6 @@
 ---
 format: html
-title: "week 2 linear regression"
+title: "wk 2: linear regression"
 ---
 
 # Linear regression
@@ -101,9 +101,9 @@ having a large p-value-- less likely there is a relation between X and Y
 
 RSE is used to either estimate the STANDARD ERROR of $\beta_x$ OR the accuracy of the overall model
 
-$ R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS} $ for how much variance is explained
+$ R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS} $ for how much variance is explained. A sanity check here: R^2 should always be [0,1].
 
-we have [RSS](#important-functions) and TSS = \sum_{i=1}^n(x_0-)
+We already know RSS and $TSS = \sum_{i=1}^n(y_i-\bar{y})$
 
 ## Important functions
 

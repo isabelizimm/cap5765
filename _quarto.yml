@@ -2,14 +2,15 @@ project:
   type: website
 
 website:
-  title: "myblog"
+  title: "CAP5765"
+  background: "#41522a"
   navbar:
     right:
       - about.qmd
       - icon: github
-        href: https://github.com/
+        href: https://github.com/isabelizimm
       - icon: twitter
-        href: https://twitter.com
+        href: https://twitter.com/isabelizimm
 format:
   html:
     theme: cosmo
