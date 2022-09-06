@@ -3,7 +3,7 @@ title: "wk 1: vocab and linear algebra"
 format: html
 ---
 
-"A good model is one that accurately predicts the outcome."
+"A good model is one that accurately predicts the outcome." (sometimes)
 
 Learning primer:
 
@@ -48,6 +48,36 @@ $$A = \begin{bmatrix}
 \end{bmatrix}
 $$
 
+If you're like me and immediately think "oh yeah, I'm going to mae a computer do that," be forewarned--dot products do not work as expected out of the box in base Python OR base R! :) 
+
+Python:
+```{python}
+# python
+
+A = [[1,-1,1],[0,2,4]]
+B = [[2,-10,7], [3,8,6]]
+
+A+2*B # okay, this actually doesn't work
+```
+```
+[[1, -1, 1], [0, 2, 4], [2, -10, 7], [3, 8, 6], [2, -10, 7], [3, 8, 6]]
+```
+R:
+```{r}
+# R
+
+matrix1 <- matrix(c(3, 9, -1, 4, 2, 6), nrow = 2)
+matrix2 <- matrix(c(5, 2, 0, 9, 3, 4), nrow = 3)
+
+matrix1*matrix2 # OKAY THIS DOESNT WORK EITHER
+```
+```
+Error in matrix1 * matrix2 : non-conformable arrays
+```
+
+So neither of these languages support matrix multiplication the way you multiply numbers. How do we do this?
+
+Python:
 ```{python}
 A = [[1,-1,1],[0,2,4]]
 B = [[2,-10,7], [3,8,6]]
@@ -55,13 +85,14 @@ B = [[2,-10,7], [3,8,6]]
 A+2*B # okay, this actually doesn't work
 ```
 
-
+R:
 ```{r}
 matrix1 <- matrix(c(3, 9, -1, 4, 2, 6), nrow = 2)
 matrix2 <- matrix(c(5, 2, 0, 9, 3, 4), nrow = 2)
 
 matrix1*matrix2 # OKAY THIS DOESNT WORK EITHER
 ```
+
 
 # Matrix multiplication
 dot product result is ALWAYS A NUMBER
@@ -73,7 +104,11 @@ Notation:
 - Qualitative output: G
 - Matrix: **A**
 
-Linear Models:
+I wanted to add more on how to do matrix multiplication and such, but I will never do as good of a job as https://e2eml.school/transformers.html 
+
+![](https://e2eml.school/images/transformers/matrix_mult_three_row_two_col.png)
+
+# Linear Models:
     - you would use regression for numerical
     - you would use classification for 
 
@@ -154,3 +189,6 @@ $$
 $$
 \hat{\beta_0} = \bar{y}-\hat{\beta_1}\bar{x}
 $$
+
+
+

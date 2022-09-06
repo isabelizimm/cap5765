@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 2: linear regression</title>
+<title>cap5765 notes - wk 2: deeper into linear regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@ ul.task-list{list-style: none;}
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 2: linear regression</h1>
+      <h1 class="title">wk 2: deeper into linear regression</h1>
                       </div>
   </div>
     
@@ -119,22 +119,12 @@ ul.task-list{list-style: none;}
 
 <section id="linear-regression" class="level1">
 <h1>Linear regression</h1>
-<p>Linear regression is a fabulous place to start with statistical learning. The math is (relatively) simple, but it can feel like there’s a lot of moving parts if you’re new to all this. In general, we want to know 3 things this week about linear regression: <a href="#create-the-line">create the best line possible</a>, <a href="#assess-coefficient-estimates">assess the coefficients</a> and <a href="#assessing-overall-accuracy-of-the-model">know if we did a good job</a>.</p>
-<p><img src="https://miro.medium.com/max/1400/1*N1-K-A43_98pYZ27fnupDA.jpeg" class="img-fluid"></p>
-<section id="create-the-line" class="level2">
-<h2 class="anchored" data-anchor-id="create-the-line">Create the line</h2>
-<p>The formula for least squares is:</p>
-<p><span class="math display">\[
-Y \approx \beta_0 + \beta_1X
-\]</span></p>
-<p>So we want to calculate out two things: <span class="math inline">\(\beta_0\)</span> (intercept) and <span class="math inline">\(\beta_1\)</span> (slope).</p>
-<p>Here are the formulas:</p>
-<p><span class="math display">\[
-\hat{\beta_1} = \frac{\sum_{j=1}^N[(x_i-\bar{x})(y_i-\bar{y})]}{\sum_{i=1}^N(x_i-\bar{x})^2}
-\]</span></p>
-<p><span class="math display">\[
-\hat{\beta_0} = \bar{y}-\hat{\beta_1}\bar{x}
-\]</span></p>
+<p>We <a href="../../posts/week-2/wk2-cda-linear.html">understand linear regression</a>, but we left with the FEAR OF EXPONENTIAL GROWTH given to us…as we get into mutliple regression, we have to compare <span class="math inline">\(2^P\)</span> (P being the number of variables) models.</p>
+<p><img src="aint%20nobody%20got%20time%20for%20that.png" class="img-fluid"></p>
+<p>https://counting.substack.com/p/what-if-you-were-an-evil-data-scientist</p>
+<section id="best-subset-all-subsets" class="level2">
+<h2 class="anchored" data-anchor-id="best-subset-all-subsets">Best subset, all subsets</h2>
+<p>Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive ()</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -145,86 +135,19 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This course involves a lot of math, and variables. It’s hard to keep them straight if you’re not used to looking at a lot of statistics.</p>
-<p>Bars (<span class="math inline">\(\bar{x}\)</span>) are for means. Think of 😐 being a mean face.</p>
-<p>Hats (<span class="math inline">\(\hat{x}\)</span>) are for estimated numbers. Think of <span class="math inline">\(\hat{y}_0\)</span> as wearing a hat to cosplay as their best guess of what <span class="math inline">\(y_0\)</span> looks like 🤠 (sometimes y is not very good at cosplaying).</p>
+<p>Algorithms can be GREEDY.</p>
 </div>
 </div>
-<p>These equations really involve just plugging in numbers, which our program is mostly going to do, so let’s not be too concerned with this right now.</p>
+<p>start with Null subset, ie, <span class="math inline">\(y = \beta_0\)</span></p>
+<p>step 2 For <span class="math inline">\(K = 1, ... , p\)</span> fit all (p k) models that contain exactly k predictors</p>
+<p>K = 1: <span class="math inline">\(M_1: t = \beta_1 + \beta_1X_1\)</span> <span class="math inline">\(M_2: t = \beta_2 + \beta_2X_2\)</span> … <span class="math inline">\(M_{10}: t = \beta_{10} + \beta_{10}X_{10}\)</span></p>
+<p>step 3 select single best method among M_0</p>
 </section>
-<section id="assess-coefficient-estimates" class="level2">
-<h2 class="anchored" data-anchor-id="assess-coefficient-estimates">Assess coefficient estimates</h2>
-<p>Rounding up a few key points:</p>
-<ul>
-<li>The difference between <span class="math inline">\(\hat{y}_i\)</span> and <span class="math inline">\(y_i\)</span> is <span class="math inline">\(e_1\)</span>. This is the distance between the actual data point and our model.</li>
-</ul>
-<p>One way to know how well our coefficients might perform is finding the standard error of an estimator to see how it varies under repeated sampling.</p>
-<p><span class="math display">\[
-SE(\hat{\beta}_1)^2 = \frac{\theta^2}{\sum_{i=1}^n(x_i-\bar{x})^2}
-\]</span></p>
-<p><span class="math display">\[
-SE(\hat{\beta}_0)^2 = \sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i-\bar{x})^2]}
-\]</span></p>
-<div class="callout-tip callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Standard error has a reverse relation with number of training set.</p>
-<p>Noise in the data affects errors in all coefficients, and is directly proportional. (ie, 4x as much data will tend to reduce standard error by 2)</p>
-</div>
-</div>
-<p>Residual Standard Error = <span class="math inline">\(\sqrt{-\frac{RSS}{n-2}}\)</span></p>
-<p>Looking at RSE, it intuitively makes sense. We have the sum of squared residuals, so we need to square root to get back to just regular ol’ residuals. We also need to divide by <em>something</em> to account for the degrees of freedom, thus <span class="math inline">\(n-2\)</span>. <a href="https://stats.stackexchange.com/questions/204238/why-divide-rss-by-n-2-to-get-rse">Interested in why we divide by 2?</a> (tldr; residual degrees of freedom.)</p>
-<p>CONFIDENCE INTERVAL <span class="math inline">\(\hat{B_1} \pm 2SE(\hat{B_1})\)</span></p>
-<p>What is a confidence interval tho? <em>values that with 95% probability, the range will contain the true unknown value</em></p>
-<p>Here’s a thread to help understand:</p>
-<blockquote class="twitter-tweet blockquote">
-<p lang="en" dir="ltr">
-Hey Stats folk, what's your 280 character definition of a confidence interval?🤔
-</p>
-— Chelsea Parlett-Pelleriti (<span class="citation" data-cites="ChelseaParlett">@ChelseaParlett</span>) <a href="https://twitter.com/ChelseaParlett/status/973657698536366080?ref_src=twsrc%5Etfw">March 13, 2018</a>
-</blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<ul>
-<li><h2 id="key-takeaways" class="anchored">key takeaways:</h2></li>
-</ul>
-</section>
-<section id="hypothesis-testing" class="level2">
-<h2 class="anchored" data-anchor-id="hypothesis-testing">Hypothesis testing</h2>
-<p><span class="math inline">\(H_0:\)</span> There is no relation between X and Y, that is <span class="math inline">\(H_0:\beta_1=0\)</span> <span class="math inline">\(H_A:\)</span> There is some relationship between X and Y, that is <span class="math inline">\(H_A:\beta_1\ne0\)</span></p>
-<p>if <span class="math inline">\(\beta_1 = 0\)</span>,</p>
-<p>to test null, we do a <span class="math inline">\(t\)</span> statistic:</p>
-<p><span class="math display">\[
-t = \frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
-\]</span></p>
-<div class="callout-tip callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>what is a p-value?</p>
-</div>
-</div>
-<p>a small p-value is good– it means our model is accurate</p>
-<p>a small p-value means we REJECT the NULL hypotheses, that is, there is SOME RELATION between X and Y</p>
-<p>having a large p-value– less likely there is a relation between X and Y</p>
-</section>
-<section id="assessing-overall-accuracy-of-the-model" class="level2">
-<h2 class="anchored" data-anchor-id="assessing-overall-accuracy-of-the-model">Assessing overall accuracy of the model</h2>
-<p>RSE is used to either estimate the STANDARD ERROR of <span class="math inline">\(\beta_x\)</span> OR the accuracy of the overall model</p>
-<p>$ R^2 = = 1 - $ for how much variance is explained. A sanity check here: R^2 should always be [0,1]. As a model’s RSS shrinks, R^2 will get closer and closer to 1.</p>
-<p>We already know RSS and <span class="math inline">\(TSS = \sum_{i=1}^n(y_i-\bar{y})\)</span></p>
+<section id="forwards-backwards-sideways-upside-down" class="level2">
+<h2 class="anchored" data-anchor-id="forwards-backwards-sideways-upside-down">Forwards, backwards, sideways, upside down</h2>
+<p>Before the world of American Ninja Warrior, there was Wipeout!</p>
+<p>Forwards selection</p>
+<p>Backwards starts with all variables, remove variable with largest p-value</p>
 </section>
 <section id="important-functions" class="level2">
 <h2 class="anchored" data-anchor-id="important-functions">Important functions</h2>
