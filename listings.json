@@ -2,8 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/CAP5765-week-2/wk2-cda-linear.html",
-      "/posts/CAP5765-week-1/wk1-cda-intro.html"
+      "/posts/week-2/wk2-deeper-into-reg.html",
+      "/posts/week-2/wk2-cda-linear.html",
+      "/posts/week-1/wk1-cda-intro.html"
     ]
   }
 ]
