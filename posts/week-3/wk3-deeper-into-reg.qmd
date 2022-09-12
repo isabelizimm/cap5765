@@ -1,44 +1,42 @@
 ---
 format: html
-title: "wk 2: deeper into linear regression"
+title: "wk 3: deeper into regression"
+image: ridge.jpg
 ---
 
 # Linear regression
 
 We [understand linear regression](wk2-cda-linear.qmd), but we left with the FEAR OF EXPONENTIAL GROWTH given to us...as we get into mutliple regression, we have to compare $2^P$ (P being the number of variables) models. 
 
-![](aint nobody got time for that)
-
-https://counting.substack.com/p/what-if-you-were-an-evil-data-scientist
 
 ## Best subset, all subsets
 
-Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive ($2^b$) and it makes things unnecessarily complex
+Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive and it makes things unnecessarily complex.
 
 :::{.callout-tip}
-Algorithms can be GREEDY.
+Algorithms can be GREEDY. Greedy algortihms pick the best immediate output, but does not consider the big picture.
 :::
 
 For forward selection:
-Null subset, ie, $y = \beta_0$
 
-step 2
+**step 1**
+start with null subset, ie, $y = \beta_0$
+
+**step 2**
 For $K = 1, ... , p$ fit all (p k) models that contain exactly k predictors
 
 K = 1:
+
   $M_1: t = \beta_1 + \beta_1X_1$
   $M_2: t = \beta_2 + \beta_2X_2$
   ...
   $M_{10}: t = \beta_{10} + \beta_{10}X_{10}$
 
-step 3
+**step 3**
 select single best method among M_0 
 
-## Forwards, backwards, sideways, upside down
+## Forwards, backwards
 
-Before the world of American Ninja Warrior, there was Wipeout! 
-
-Forwards selection
 
 Backwards starts with all variables, remove variable with largest p-value
 
@@ -58,9 +56,27 @@ In fitting a model to the training data using least squares:
   - regression coefficients are estimated so that RSS is as small as possible
   - training sets for RSS and $R^2$ cannot be used
 
+
+## What's wrong with stepwise?
+
+IRL, [stepwise is not the best to use](https://stats.stackexchange.com/questions/20836/algorithms-for-automatic-model-selection/20856#20856). 
+
+Pulling out the highlights from the link:
+
+> 1. It yields R-squared values that are badly biased to be high.
+> 2. The F and chi-squared tests quoted next to each variable on the printout do not have the claimed distribution.
+> 3. The method yields confidence intervals for effects and predicted values that are falsely narrow; see Altman and Andersen (1989).
+> 4. It yields p-values that do not have the proper meaning, and the proper correction for them is a difficult problem.
+> 5. It gives biased regression coefficients that need shrinkage (the coefficients for remaining variables are too large; see Tibshirani [1996]).
+> 6. It has severe problems in the presence of collinearity.
+> 7. It is based on methods (e.g., F tests for nested models) that were intended to be used to test prespecified hypotheses.
+> 8. Increasing the sample size does not help very much; see Derksen and Keselman (1992).
+> 9. It allows us to not think about the problem.
+> 10. It uses a lot of paper.
+
 ## Comparing models
 
-Big things to remember here: $C_p$, AIC, BIC.
+Big things to remember here: $C_p$, $AIC$, $BIC$, and $R^2$.
 
 :::{.panel-tabset}
 
@@ -77,9 +93,8 @@ what does bias mean? data bias? model bias? anything that is not a normal distri
 
 Smaller is better.
 
-
-
 ## Akaike information criterion (AIC)
+
 $AIC = \frac{1}{n\hat{\sigma}^2}(RSS + 2d\hat{\sigma}^2)$
 which simplifies to
 $AIC = \frac{C_p}{\hat{\sigma}^2}$
@@ -89,6 +104,7 @@ $AIC = \frac{C_p}{\hat{\sigma}^2}$
 Smaller is better.
 
 ## Bayesian information criterion (BIC)
+
 $BIC = \frac{1}{n}(RSS + log(n)d\hat{\sigma}^2)$
 
 penalty is $log(n)d\hat{\sigma}^2)$
@@ -98,12 +114,13 @@ becuase it is using log, BIC penalizes large models more than AIC, which always 
 Smaller is better.
 
 ## Adjusted $R^2$
+
 $ R^2 = 1 - \frac{RSS/(n-d-1)}{TSS/(n-1)}
 
 ![](https://www.google.com/search?q=rss+over+tss&rlz=1C5CHFA_enUS981US981&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjptpTz2IX6AhXXnWoFHUbgAjoQ_AUoAnoECAEQBA&biw=1098&bih=956&dpr=2#imgrc=y9t8tEzjKinQpM)
 
 it can be negative, but that means thiings are going very bad. it cannot be greater than 1 (you can't explain more than 100% of your model). negative values occur when your model is worse than just always guessing the average of all the data points
-https://stats.stackexchange.com/questions/12900/when-is-r-squared-negative
+More info on [negative $R^2$](https://stats.stackexchange.com/questions/12900/when-is-r-squared-negative)
 
 
 MAXIMIZE!
@@ -166,4 +183,4 @@ lasso uses $l_1$ norm is $ ||\beta\\_1 = \sum|\beta|$
 
 lasso does not retain all of the coefficients, so it is in fact a selection method
 
-## Important functions
+One obvious advantage of lasso regression over ridge regression, is that it produces simpler and more interpretable models that incorporate only a reduced set of the predictors.
