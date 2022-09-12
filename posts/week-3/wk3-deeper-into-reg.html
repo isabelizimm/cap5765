@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 2: deeper into linear regression</title>
+<title>cap5765 notes - wk 3: deeper into regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -95,7 +95,7 @@ ul.task-list{list-style: none;}
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 2: deeper into linear regression</h1>
+      <h1 class="title">wk 3: deeper into regression</h1>
                       </div>
   </div>
     
@@ -120,11 +120,9 @@ ul.task-list{list-style: none;}
 <section id="linear-regression" class="level1">
 <h1>Linear regression</h1>
 <p>We <a href="wk2-cda-linear.qmd">understand linear regression</a>, but we left with the FEAR OF EXPONENTIAL GROWTH given to us…as we get into mutliple regression, we have to compare <span class="math inline">\(2^P\)</span> (P being the number of variables) models.</p>
-<p><img src="aint%20nobody%20got%20time%20for%20that.png" class="img-fluid"></p>
-<p>https://counting.substack.com/p/what-if-you-were-an-evil-data-scientist</p>
 <section id="best-subset-all-subsets" class="level2">
 <h2 class="anchored" data-anchor-id="best-subset-all-subsets">Best subset, all subsets</h2>
-<p>Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive (<span class="math inline">\(2^b\)</span>) and it makes things unnecessarily complex</p>
+<p>Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive and it makes things unnecessarily complex.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -135,18 +133,18 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Algorithms can be GREEDY.</p>
+<p>Algorithms can be GREEDY. Greedy algortihms pick the best immediate output, but does not consider the big picture.</p>
 </div>
 </div>
-<p>For forward selection: Null subset, ie, <span class="math inline">\(y = \beta_0\)</span></p>
-<p>step 2 For <span class="math inline">\(K = 1, ... , p\)</span> fit all (p k) models that contain exactly k predictors</p>
-<p>K = 1: <span class="math inline">\(M_1: t = \beta_1 + \beta_1X_1\)</span> <span class="math inline">\(M_2: t = \beta_2 + \beta_2X_2\)</span> … <span class="math inline">\(M_{10}: t = \beta_{10} + \beta_{10}X_{10}\)</span></p>
-<p>step 3 select single best method among M_0</p>
+<p>For forward selection:</p>
+<p><strong>step 1</strong> start with null subset, ie, <span class="math inline">\(y = \beta_0\)</span></p>
+<p><strong>step 2</strong> For <span class="math inline">\(K = 1, ... , p\)</span> fit all (p k) models that contain exactly k predictors</p>
+<p>K = 1:</p>
+<p><span class="math inline">\(M_1: t = \beta_1 + \beta_1X_1\)</span> <span class="math inline">\(M_2: t = \beta_2 + \beta_2X_2\)</span> … <span class="math inline">\(M_{10}: t = \beta_{10} + \beta_{10}X_{10}\)</span></p>
+<p><strong>step 3</strong> select single best method among M_0</p>
 </section>
-<section id="forwards-backwards-sideways-upside-down" class="level2">
-<h2 class="anchored" data-anchor-id="forwards-backwards-sideways-upside-down">Forwards, backwards, sideways, upside down</h2>
-<p>Before the world of American Ninja Warrior, there was Wipeout!</p>
-<p>Forwards selection</p>
+<section id="forwards-backwards" class="level2">
+<h2 class="anchored" data-anchor-id="forwards-backwards">Forwards, backwards</h2>
 <p>Backwards starts with all variables, remove variable with largest p-value</p>
 <p>Best subset https://stats.stackexchange.com/questions/20836/algorithms-for-automatic-model-selection/20856#20856</p>
 <p>(what about racing?)</p>
@@ -166,9 +164,28 @@ Note
 </div>
 <p>Training MSE is generally an underestimate of the test MSE, where <span class="math inline">\(MSE = RSS/n\)</span> In fitting a model to the training data using least squares: - regression coefficients are estimated so that RSS is as small as possible - training sets for RSS and <span class="math inline">\(R^2\)</span> cannot be used</p>
 </section>
+<section id="whats-wrong-with-stepwise" class="level2">
+<h2 class="anchored" data-anchor-id="whats-wrong-with-stepwise">What’s wrong with stepwise?</h2>
+<p>IRL, <a href="https://stats.stackexchange.com/questions/20836/algorithms-for-automatic-model-selection/20856#20856">stepwise is not the best to use</a>.</p>
+<p>Pulling out the highlights from the link:</p>
+<blockquote class="blockquote">
+<ol type="1">
+<li>It yields R-squared values that are badly biased to be high.</li>
+<li>The F and chi-squared tests quoted next to each variable on the printout do not have the claimed distribution.</li>
+<li>The method yields confidence intervals for effects and predicted values that are falsely narrow; see Altman and Andersen (1989).</li>
+<li>It yields p-values that do not have the proper meaning, and the proper correction for them is a difficult problem.</li>
+<li>It gives biased regression coefficients that need shrinkage (the coefficients for remaining variables are too large; see Tibshirani [1996]).</li>
+<li>It has severe problems in the presence of collinearity.</li>
+<li>It is based on methods (e.g., F tests for nested models) that were intended to be used to test prespecified hypotheses.</li>
+<li>Increasing the sample size does not help very much; see Derksen and Keselman (1992).</li>
+<li>It allows us to not think about the problem.</li>
+<li>It uses a lot of paper.</li>
+</ol>
+</blockquote>
+</section>
 <section id="comparing-models" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-models">Comparing models</h2>
-<p>Big things to remember here: <span class="math inline">\(C_p\)</span>, AIC, BIC.</p>
+<p>Big things to remember here: <span class="math inline">\(C_p\)</span>, <span class="math inline">\(AIC\)</span>, <span class="math inline">\(BIC\)</span>, and <span class="math inline">\(R^2\)</span>.</p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true"><span class="math inline">\(C_p\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Akaike information criterion (AIC)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Bayesian information criterion (BIC)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Adjusted <span class="math inline">\(R^2\)</span></a></li></ul>
 <div class="tab-content">
@@ -199,7 +216,7 @@ Note
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
 <p>$ R^2 = 1 - </p>
 <p><img src="https://www.google.com/search?q=rss+over+tss&amp;rlz=1C5CHFA_enUS981US981&amp;source=lnms&amp;tbm=isch&amp;sa=X&amp;ved=2ahUKEwjptpTz2IX6AhXXnWoFHUbgAjoQ_AUoAnoECAEQBA&amp;biw=1098&amp;bih=956&amp;dpr=2#imgrc=y9t8tEzjKinQpM.png" class="img-fluid"></p>
-<p>it can be negative, but that means thiings are going very bad. it cannot be greater than 1 (you can’t explain more than 100% of your model). negative values occur when your model is worse than just always guessing the average of all the data points https://stats.stackexchange.com/questions/12900/when-is-r-squared-negative</p>
+<p>it can be negative, but that means thiings are going very bad. it cannot be greater than 1 (you can’t explain more than 100% of your model). negative values occur when your model is worse than just always guessing the average of all the data points More info on <a href="https://stats.stackexchange.com/questions/12900/when-is-r-squared-negative">negative <span class="math inline">\(R^2\)</span></a></p>
 <p>MAXIMIZE!</p>
 </div>
 </div>
@@ -243,12 +260,10 @@ y = \beta_0 + \beta_1X_1 + ... + \beta_pX_p
 <p>fix <span class="math inline">\(\lambda\)</span> and then do minimization problem. if <span class="math inline">\(\lambda\)</span> is near 0, it esentially is just least squared. if the <span class="math inline">\(\lambda\)</span> approaches infinity, ridge coefficient estimates shrink to zero</p>
 <p>lasso uses <span class="math inline">\(l_1\)</span> norm is $ ||\_1 = ||$</p>
 <p>lasso does not retain all of the coefficients, so it is in fact a selection method</p>
-</section>
-</section>
-<section id="important-functions" class="level2">
-<h2 class="anchored" data-anchor-id="important-functions">Important functions</h2>
+<p>One obvious advantage of lasso regression over ridge regression, is that it produces simpler and more interpretable models that incorporate only a reduced set of the predictors.</p>
 
 
+</section>
 </section>
 </section>
 
