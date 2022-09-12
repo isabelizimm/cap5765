@@ -1,0 +1,169 @@
+---
+format: html
+title: "wk 2: deeper into linear regression"
+---
+
+# Linear regression
+
+We [understand linear regression](wk2-cda-linear.qmd), but we left with the FEAR OF EXPONENTIAL GROWTH given to us...as we get into mutliple regression, we have to compare $2^P$ (P being the number of variables) models. 
+
+![](aint nobody got time for that)
+
+https://counting.substack.com/p/what-if-you-were-an-evil-data-scientist
+
+## Best subset, all subsets
+
+Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive ($2^b$) and it makes things unnecessarily complex
+
+:::{.callout-tip}
+Algorithms can be GREEDY.
+:::
+
+For forward selection:
+Null subset, ie, $y = \beta_0$
+
+step 2
+For $K = 1, ... , p$ fit all (p k) models that contain exactly k predictors
+
+K = 1:
+  $M_1: t = \beta_1 + \beta_1X_1$
+  $M_2: t = \beta_2 + \beta_2X_2$
+  ...
+  $M_{10}: t = \beta_{10} + \beta_{10}X_{10}$
+
+step 3
+select single best method among M_0 
+
+## Forwards, backwards, sideways, upside down
+
+Before the world of American Ninja Warrior, there was Wipeout! 
+
+Forwards selection
+
+Backwards starts with all variables, remove variable with largest p-value
+
+Best subset https://stats.stackexchange.com/questions/20836/algorithms-for-automatic-model-selection/20856#20856
+
+(what about racing?)
+
+
+when we are using stepwise, we want to minimize training set MSE. sure, but what about the MSE for the test set? 
+
+:::{.callout-note}
+The MSE for a test set is quadratic, where the MSE for a training set is negative linear.
+:::
+
+Training MSE is generally an underestimate of the test MSE, where $MSE = RSS/n$
+In fitting a model to the training data using least squares:
+  - regression coefficients are estimated so that RSS is as small as possible
+  - training sets for RSS and $R^2$ cannot be used
+
+## Comparing models
+
+Big things to remember here: $C_p$, AIC, BIC.
+
+:::{.panel-tabset}
+
+## $C_p$
+$C_p = \frac{1}{n}(RSS + 2d\hat{\sigma}^2)$
+
+- d is number of predictors
+- $\sigma$ is estimate of the variance of error for each response
+- $2d\hat{\sigma}^2$ is the penalty. penalty increase as number of predictors increase
+
+if $\hat{\sigma}^2$ is unbiased estimate, then $C_p$ is an unbiased estimate of test MSE
+
+what does bias mean? data bias? model bias? anything that is not a normal distribution?
+
+Smaller is better.
+
+
+
+## Akaike information criterion (AIC)
+$AIC = \frac{1}{n\hat{\sigma}^2}(RSS + 2d\hat{\sigma}^2)$
+which simplifies to
+$AIC = \frac{C_p}{\hat{\sigma}^2}$
+
+- directly proportional to $C_p$
+
+Smaller is better.
+
+## Bayesian information criterion (BIC)
+$BIC = \frac{1}{n}(RSS + log(n)d\hat{\sigma}^2)$
+
+penalty is $log(n)d\hat{\sigma}^2)$
+
+becuase it is using log, BIC penalizes large models more than AIC, which always uses the penalty of 2 (this is bc log(7))
+
+Smaller is better.
+
+## Adjusted $R^2$
+$ R^2 = 1 - \frac{RSS/(n-d-1)}{TSS/(n-1)}
+
+![](https://www.google.com/search?q=rss+over+tss&rlz=1C5CHFA_enUS981US981&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjptpTz2IX6AhXXnWoFHUbgAjoQ_AUoAnoECAEQBA&biw=1098&bih=956&dpr=2#imgrc=y9t8tEzjKinQpM)
+
+it can be negative, but that means thiings are going very bad. it cannot be greater than 1 (you can't explain more than 100% of your model). negative values occur when your model is worse than just always guessing the average of all the data points
+https://stats.stackexchange.com/questions/12900/when-is-r-squared-negative
+
+
+MAXIMIZE!
+
+:::
+
+## Shrinkage methods
+
+Kinda like subset, but better. You try to make some of the coefficients to zero, aka shrinking them. Use all the predictors. Ridge regression and lasso are the most famous. (Don't shrink the intercept, only the predictors.)
+
+$$
+y = \beta_0 + \beta_1X_1 + ... + \beta_pX_p
+$$
+
+Q: can using a shrinkage method increase variance?
+
+### Ridge
+Formula:
+$$
+\sum_i(y_i-\beta_0-\sum_j\beta_jX_{ij})^2
+$$
+
+Ridge is good in terms of bias-variance trade off. As $\lambda$ increases, the flexibility of the ridge regression fit decreases, leading to decreased variance but increased bias.
+
+$\lambda$ if lambda is 0, the penalty is the same as the RSS. when lambda is greater than 0, RSS is greater.
+
+minimize this quanity, so each lambda
+
+- $\lambda\sum\beta_j^2$ is shrinkage penalty
+- $\lambda$ is tuning parameter
+- $\lambda \ge 0$
+
+when $\lambda = 0$, it is just RSS
+
+The coefficient estimate obtained by Ridge Regression are denoted $\beta_\lambda^R$ for each $\lambda$
+
+all these $\beta_j^R$ depend on $\lambda$
+($\beta_j^R$ <- is a vector when p > 1)
+
+selecting good value of $\lambda$ is critical (we will use cross validation)
+ridge uses the $l_2$ norm is $||\beta\\_2 = \sum|\beta|^2 $
+
+_a range of 0/least squares to least squares/least squares (1)_
+
+con: ridge retains all coefficients, no selection
+
+### Lasso
+
+_on a scale of least squares to zero, how are you feeling today?_
+
+$$
+\sum_i(y_i-\beta_0-\sum_j\beta_jX_{ij})^2 +\lambda\sum_j|\beta_j|
+$$
+
+function of data, but also function of $\lambda$
+
+fix $\lambda$ and then do minimization problem. if $\lambda$ is near 0, it esentially is just least squared. if the $\lambda$ approaches infinity, ridge coefficient estimates shrink to zero
+
+lasso uses $l_1$ norm is $ ||\beta\\_1 = \sum|\beta|$
+
+lasso does not retain all of the coefficients, so it is in fact a selection method
+
+## Important functions
