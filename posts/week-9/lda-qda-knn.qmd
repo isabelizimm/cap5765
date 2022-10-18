@@ -1,0 +1,91 @@
+---
+format: html
+title: "wk 9: knn + pca"
+---
+
+# KNN
+
+knn is literally looking at a data point and peeking at the classifcations of its neighbors, then making a guess. ie, $N_0$ = {1,2,3} where {1,2,3} are the 3 closest points by euclidean distance
+
+the proper algorithm is:
+
+$Pr(Y=k|X=x_0)=\frac{1}{K}\sum_{i\in N_0}I(y_i=k)$ 
+if 1=red, 2=red, 3=yellow, then $Pr=\frac{2}{3}$
+
+what happens if neighbor only has one point?
+
+what if no neighbors?
+only goes off itself, if 1 neighbor
+
+k is usually odd to avoid ties 
+
+its not really modeling, it just queries training data for new points
+
+# what is the black box model?
+
+you can't see the inner workings of a model when you are using it in code...even models that are really not considered to be black box (ie, linear regression) can act as black boxes in practice.
+
+# PCA
+
+main goals: identify pattern in data
+
+detect correlation btwn variables
+
+strong correlation-> tries to reduce the dimensionality
+
+finding the maximum variance in high dimensionality data and project to a smaller subspace while retaining most of the info
+
+summary of PCA:
+
+- standardize/normalize the data
+- obtain the eigenvector eigenspaces from covariance matrix
+- perform singular value decomposition (SVD)
+- sort eigenvalues in decreasing order and choose k largest eigenvalues, where k is # of dimensions of new feature subspaces
+- transform the original data set X variables to obtain feature subspace Y
+
+to understand after:
+largest eigenvalues is largest variety, explain variance of data in the new features (this is kinda like $R^2$?)
+
+::: {.callout-tip}
+what is the difference btwn correlation and covariance?
+they are the same, but [correlation is scaled](https://socratic.org/questions/what-is-the-difference-between-a-correlation-matrix-and-a-covariance-matrix-1)
+:::
+
+reduce dimensions and create fewer ones
+allow for viz many dimensions in 2 dim, or preprocessing for models that cant take high dimensions
+
+ends up being a normalized linear combination of features.
+
+first principal component of a set of features $X_1, X_2, ..., X_p$ is the normalized linear combination of the features
+
+$$Z_1 = \phi_{11} X_1 + \phi_{21} X_2 + ... + \phi_{p1}X_p$$
+that has the largest variance
+
+We mean that normalized that $\sum_{j=1}^p  \phi_{j1}^2 = 1$.
+
+we refer to $\phi_{11}, ..., \phi_{p1}$ as the loadings of the first principal component.
+
+And think of them as the loading vector $\phi_1$
+
+Assuming we have a $n \times p$ data set $\mathbf{X}$
+
+since we are only interested in the variance we assume that the variables have been centered
+
+$$
+\underset{\phi_{11}, ..., \phi_{p1}}{\text{maximize}} \left\{ \dfrac{1}{n} \sum^n_{i=j} \left( \sum^p_{j=1} \phi_{j1}x_{ij} \right)^2 \right\} \quad \text{subject to} \quad \sum_{j=1}^p  \phi_{j1}^2 = 1
+$$
+
+still thinking about $R^2$-- so would you be able to use this? if PCA is essentially trying to figure out how to capture variance and is represented by explained variance, and $R^2$ is a measure of explained variance...
+
+PCR -> principal component analysis using regression
+
+$ y = \beta_0 + \beta_1Z_1 + \beta_2Z_2$ is the linear regression using PCA components $Z_1$ and $Z_2$
+
+### what is SVD
+
+singular value decomposition
+use it on covariance matricies,
+guarantee you find the $Z_1$ has maximum variance, since it has the largest eigenvalue
+second component $Z_2$ will be orthogonal to $Z_1$, so it will be second largest variance and NOT CORRELATED with $Z_1$
+also reducing the dimension
+

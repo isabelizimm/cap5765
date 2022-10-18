@@ -1,0 +1,85 @@
+---
+format: html
+title: "wk 7 recap: midterm study guide"
+---
+
+Apologies for this week...its a little messy! Scratch notes for midterm review
+
+## Relation between X and Y in linear regression vs. logistic regression
+
+## Explain linear regression
+
+## Brief explanation of linear regression
+
+## Explain:
+
+- Best subset selection
+- Stepwise selection 
+    - Forwards: start w 0, add in predictors
+    - Backwards: start w all, subtract predictors
+    - Which is better? 
+        - Best subset 
+    - Why?
+        - FW/BW: stepwise will bias R^2 values, model will smallest training RSS will be best subset, since it will encompass all the options from forward and backward stepwise, as well as interactions between these variables
+
+## Difference between ridge and LASSO
+Computing penalty
+Ridge $B_j^2$, makes a O when you draw contours for error and constraint functions
+LASSO $|B_j|$, makes a square when you draw contours for error and constraint functions
+Larger tuning parameter
+LASSO can be selection
+Think it can “lasso” a portion of the variables
+Ridge all the predictors will remain in final model
+
+## T/F: Lasso and Ridge, compared to least squares, are less flexible and will give improved prediction accuracy when its increase in bias is less than its decrease in variance.
+bias-variance trade-off. 
+ls have excessively high variance, the lasso solution can yield a reduction in variance at the expense of a small increase in bias. This consequently can generate more accurate predictions. In addition, lasso performs variable selection which makes it easier to interpret than other methods like ridge regression.
+
+## Explain logistic regression:
+Log odds of linear regression
+Coefficients found by maximum likelihood
+
+## Whether a student will pass/fail in an exam based on hours of study can be solved with *LOGISTIC*/LINEAR regression.
+Why?
+Output variable is a classification, not a regression
+
+
+## Explain LDA
+Dim reduction
+Modeling distribution of predictors
+Like PCA that it reduces dimensions, but focuses on SEPERABILITY among known categories
+Creates a new acis and projects the data on this axis that maximizes separation
+2 criteria, considered simultaneously: maximize distance between means (if high dim, use centroid), minimize variation w/in cat
+
+
+## LDA assumptions
+observations within each class come from a normal distribution 
+with a class specific mean and 
+a common variance σ2,
+and plugging estimates for these parameters into the Bayes classifier
+Number of parameters in LDA
+For LDA, (p+1) parameters are needed to construct the discriminant function in (2). For a problem with K classes, we would only need (K-1) such discriminant functions by arbitrarily choosing one class to be the base class (subtracting the base class likelihood from all other classes). Hence, the total number of estimated parameters for LDA is (K-1)(p+1).
+
+When there is substantial separation between the two classes, the parameter estimates for the logistic regression model are surprisingly unstable. The methods that we consider in this section do not suffer from this problem.
+
+If the distribution of the predictors X is approximately normal in each of the classes and the sample size is small, then the approaches in this section may be more accurate than logistic regression.
+
+## Explain bias-variance tradeoff
+Inability for a machine learning method to capture true relationship is BIAS (if it cant ever match, it is largely BIASED) (swayed by every single data point, no reservations, no backbone, no pre-determined bias to keep it safe) simple models tend to have higher bias
+Difference in fits between data sets is called VARIANCE (hard to predict how it will do with future data sets if high variance) complex models tend to have higher variance
+
+Ideally low bias, low variability
+
+
+## What is over-fitting?
+Training model to be too flexible (not enough bias)
+You can reduce this by using cross fold validation
+
+EXTRAS:
+
+PCA:
+Focuses on dimension reduction by most variation
+
+(find the sweet spot with regularization, boosting, bagging)
+
+
