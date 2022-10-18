@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>cap5765 notes - wk 9: knn + pca</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">cap5765 notes</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">iz</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/isabelizimm"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/isabelizimm"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">wk 9: knn + pca</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="knn" class="level1">
+<h1>KNN</h1>
+<p>knn is literally looking at a data point and peeking at the classifcations of its neighbors, then making a guess. ie, <span class="math inline">\(N_0\)</span> = {1,2,3} where {1,2,3} are the 3 closest points by euclidean distance</p>
+<p>the proper algorithm is:</p>
+<p><span class="math inline">\(Pr(Y=k|X=x_0)=\frac{1}{K}\sum_{i\in N_0}I(y_i=k)\)</span> if 1=red, 2=red, 3=yellow, then <span class="math inline">\(Pr=\frac{2}{3}\)</span></p>
+<p>what happens if neighbor only has one point?</p>
+<p>what if no neighbors? only goes off itself, if 1 neighbor</p>
+<p>k is usually odd to avoid ties</p>
+<p>its not really modeling, it just queries training data for new points</p>
+</section>
+<section id="what-is-the-black-box-model" class="level1">
+<h1>what is the black box model?</h1>
+<p>you can’t see the inner workings of a model when you are using it in code…even models that are really not considered to be black box (ie, linear regression) can act as black boxes in practice.</p>
+</section>
+<section id="pca" class="level1">
+<h1>PCA</h1>
+<p>main goals: identify pattern in data</p>
+<p>detect correlation btwn variables</p>
+<p>strong correlation-&gt; tries to reduce the dimensionality</p>
+<p>finding the maximum variance in high dimensionality data and project to a smaller subspace while retaining most of the info</p>
+<p>summary of PCA:</p>
+<ul>
+<li>standardize/normalize the data</li>
+<li>obtain the eigenvector eigenspaces from covariance matrix</li>
+<li>perform singular value decomposition (SVD)</li>
+<li>sort eigenvalues in decreasing order and choose k largest eigenvalues, where k is # of dimensions of new feature subspaces</li>
+<li>transform the original data set X variables to obtain feature subspace Y</li>
+</ul>
+<p>to understand after: largest eigenvalues is largest variety, explain variance of data in the new features (this is kinda like <span class="math inline">\(R^2\)</span>?)</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>what is the difference btwn correlation and covariance? they are the same, but <a href="https://socratic.org/questions/what-is-the-difference-between-a-correlation-matrix-and-a-covariance-matrix-1">correlation is scaled</a></p>
+</div>
+</div>
+<p>reduce dimensions and create fewer ones allow for viz many dimensions in 2 dim, or preprocessing for models that cant take high dimensions</p>
+<p>ends up being a normalized linear combination of features.</p>
+<p>first principal component of a set of features <span class="math inline">\(X_1, X_2, ..., X_p\)</span> is the normalized linear combination of the features</p>
+<p><span class="math display">\[Z_1 = \phi_{11} X_1 + \phi_{21} X_2 + ... + \phi_{p1}X_p\]</span></p>
+<p>that has the largest variance</p>
+<p>We mean that normalized that <span class="math inline">\(\sum_{j=1}^p \phi_{j1}^2 = 1\)</span>.</p>
+<p>we refer to <span class="math inline">\(\phi_{11}, ..., \phi_{p1}\)</span> as the loadings of the first principal component.</p>
+<p>And think of them as the loading vector <span class="math inline">\(\phi_1\)</span></p>
+<p>Assuming we have a <span class="math inline">\(n \times p\)</span> data set <span class="math inline">\(\mathbf{X}\)</span></p>
+<p>since we are only interested in the variance we assume that the variables have been centered</p>
+<p><span class="math display">\[
+\underset{\phi_{11}, ..., \phi_{p1}}{\text{maximize}} \left\{ \dfrac{1}{n} \sum^n_{i=j} \left( \sum^p_{j=1} \phi_{j1}x_{ij} \right)^2 \right\} \quad \text{subject to} \quad \sum_{j=1}^p  \phi_{j1}^2 = 1
+\]</span></p>
+<p>still thinking about <span class="math inline">\(R^2\)</span>– so would you be able to use this? if PCA is essentially trying to figure out how to capture variance and is represented by explained variance, and <span class="math inline">\(R^2\)</span> is a measure of explained variance…</p>
+<p>PCR -&gt; principal component analysis using regression</p>
+<p>$ y = _0 + _1Z_1 + _2Z_2$ is the linear regression using PCA components <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span></p>
+<section id="what-is-svd" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-svd">what is SVD</h3>
+<p>singular value decomposition use it on covariance matricies, guarantee you find the <span class="math inline">\(Z_1\)</span> has maximum variance, since it has the largest eigenvalue second component <span class="math inline">\(Z_2\)</span> will be orthogonal to <span class="math inline">\(Z_1\)</span>, so it will be second largest variance and NOT CORRELATED with <span class="math inline">\(Z_1\)</span> also reducing the dimension</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Blog made with 💜 and <a href="https://quarto.org/">Quarto</a></div>   
+  </div>
+</footer>
+
+
+
+</body></html>
