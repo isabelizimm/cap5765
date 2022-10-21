@@ -81,6 +81,13 @@ PCR -> principal component analysis using regression
 
 $ y = \beta_0 + \beta_1Z_1 + \beta_2Z_2$ is the linear regression using PCA components $Z_1$ and $Z_2$
 
+tldr;
+create new variables that are linear combinations of original variables
+linear combinations are uncorrelated
+new variables are principal components
+
+[how to choose number of components?](https://www.mikulskibartosz.name/pca-how-to-choose-the-number-of-components/)
+
 ### what is SVD
 
 singular value decomposition
@@ -89,3 +96,48 @@ guarantee you find the $Z_1$ has maximum variance, since it has the largest eige
 second component $Z_2$ will be orthogonal to $Z_1$, so it will be second largest variance and NOT CORRELATED with $Z_1$
 also reducing the dimension
 
+
+# On covariance
+
+correlation matrix is between -1 and 1. covariance any number. 
+
+covariance is practical esp w mulitvariate issues.
+
+variance: each value subtracted from mean of that variable, differences squared, divided by number of values in that variable
+
+so **CO**variance is calculated between different variables: values of both variables are multiplied by taking the difference from the mean and diving by number of values
+cov(x,x) = var(x)
+
+![](https://www.google.com/url?sa=i&url=https%3A%2F%2Ftowardsdatascience.com%2F5-things-you-should-know-about-covariance-26b12a0516f1&psig=AOvVaw0mAtlZPNx_RLXe8BObd1Q6&ust=1666370659392000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCPjpncyg7_oCFQAAAAAdAAAAABAD)
+
+positive: positive relationship, variate in the same direction
+
+negative: negative relationship between 2 variables, variate in opposite directions
+
+zero: no relation between data
+
+size of a covariance value: not scaled, so just bc numbers are high doesn't mean that the covariance is high
+
+```{r}
+A <- matrix(c(13, -4, 2, -4, 11, -2, 2, -2, 8), 3, 3, byrow = TRUE)
+```
+
+```{r}
+ev <- eigen(A)
+values <- ev$values
+```
+
+```{r}
+ev$vectors
+```
+
+eigenvalues and eigenvectors of covariance matrix
+eigenvalues find magnitude and spread of data points
+when cov = 0, eigenvalues directly equal to variance values
+eigenvectors show direction
+
+use these in PCA and LDA :D 
+
+
+quiz on PCA + covariance
+not coding
