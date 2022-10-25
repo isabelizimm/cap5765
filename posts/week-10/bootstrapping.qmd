@@ -1,0 +1,38 @@
+---
+format: html
+title: "wk 10: bootstrapping"
+---
+
+# Resampling
+
+Resampling methods involve repeatedly drawing samples from a training set and refitting a model of interest on each sample in order to obtain additional information about the fitted model.
+
+Gives distribution of sample population
+
+common ways to 
+
+# Bootstrap
+
+The bootstrap is a widely applicable and extremely powerful statistical tool that can be used to quantify the uncertainty associated with a given estimator or statistical learning method
+
+bootstrapping was originally a method for assessing statistical accuracy of an estimator
+
+![](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.alpharithms.com%2Fstatistical-estimators-402811%2F&psig=AOvVaw0ANBDiq2C4c8WEqXqnhcG1&ust=1666804914823000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCJjl16jy-_oCFQAAAAAdAAAAABAD)
+
+first, each bootstrap sample must be of the same size as the original sample
+second, each bookstrap sample must be taken **with replacement** from the original sample
+
+is bootstrapping considered simulated data?
+no-- simulated would be new people. this is reusing people
+
+linear function
+
+Beer = $\alpha$ + $\beta$(wings) | n=30
+
+1. take sample n=30
+2. do regression to find $\hat{\alpha}$ and $\hat{\beta}$
+3. keep track of $\hat{\alpha}$ and $\hat{\beta}$
+4. do this 10,000 times
+5. plot distribution
+
+we end up with a bootstrap distribution for $\hat{\beta}$

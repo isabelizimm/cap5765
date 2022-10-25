@@ -58,7 +58,10 @@ ends up being a normalized linear combination of features.
 
 first principal component of a set of features $X_1, X_2, ..., X_p$ is the normalized linear combination of the features
 
-$$Z_1 = \phi_{11} X_1 + \phi_{21} X_2 + ... + \phi_{p1}X_p$$
+$$
+Z_1 = \phi_{11} X_1 + \phi_{21} X_2 + ... + \phi_{p1}X_p
+$$
+
 that has the largest variance
 
 We mean that normalized that $\sum_{j=1}^p  \phi_{j1}^2 = 1$.
@@ -75,6 +78,7 @@ $$
 \underset{\phi_{11}, ..., \phi_{p1}}{\text{maximize}} \left\{ \dfrac{1}{n} \sum^n_{i=j} \left( \sum^p_{j=1} \phi_{j1}x_{ij} \right)^2 \right\} \quad \text{subject to} \quad \sum_{j=1}^p  \phi_{j1}^2 = 1
 $$
 
+(m<p)
 still thinking about $R^2$-- so would you be able to use this? if PCA is essentially trying to figure out how to capture variance and is represented by explained variance, and $R^2$ is a measure of explained variance...
 
 PCR -> principal component analysis using regression
@@ -87,6 +91,17 @@ linear combinations are uncorrelated
 new variables are principal components
 
 [how to choose number of components?](https://www.mikulskibartosz.name/pca-how-to-choose-the-number-of-components/)
+
+geometric explanation of PCA: you usually center and scale
+
+the more correlated the original data, the better this line (first component) will explain the actual values of the observed measurements--goal is to minimize sum of residuals (distance from origin to projected point is called the "score")
+
+find the first latent variable == first principal component
+
+would you use PCA and then stop? or would you usually use it as feature engineering and then continue on
+
+
+Knowing relation btwn maximizing variance and how this is related to minimize residual
 
 ### what is SVD
 
