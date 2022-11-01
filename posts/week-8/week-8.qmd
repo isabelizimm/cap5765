@@ -1,8 +1,0 @@
----
-format: html
-title: "wk 8 recap"
----
-
-week 8: midterm week!
-
-then i was out :(

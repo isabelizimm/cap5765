@@ -3,7 +3,6 @@ project:
 
 website:
   title: "cap5765 notes"
-  background: "#41522a"
   page-footer:
     left: "Blog made with 💜 and [Quarto](https://quarto.org/)"
   navbar:

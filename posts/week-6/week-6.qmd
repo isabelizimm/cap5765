@@ -1,6 +1,0 @@
----
-format: html
-title: "wk 6 recap"
----
-
-hurricane ian! no classes

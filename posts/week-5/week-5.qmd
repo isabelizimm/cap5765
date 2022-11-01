@@ -1,8 +1,0 @@
----
-format: html
-title: "wk 5 recap"
----
-
-to be updated with notes
-
-LDA + QDA

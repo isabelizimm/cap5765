@@ -103,5 +103,131 @@
     "title": "wk 3: deeper into regression",
     "section": "",
     "text": "We understand linear regression, but we left with the FEAR OF EXPONENTIAL GROWTH given to us…as we get into mutliple regression, we have to compare \\(2^P\\) (P being the number of variables) models.\n\n\nComputer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive and it makes things unnecessarily complex.\n\n\n\n\n\n\nTip\n\n\n\nAlgorithms can be GREEDY. Greedy algortihms pick the best immediate output, but does not consider the big picture.\n\n\nFor forward selection:\nstep 1 start with null subset, ie, \\(y = \\beta_0\\)\nstep 2 For \\(K = 1, ... , p\\) fit all (p k) models that contain exactly k predictors\nK = 1:\n\\(M_1: t = \\beta_1 + \\beta_1X_1\\) \\(M_2: t = \\beta_2 + \\beta_2X_2\\) … \\(M_{10}: t = \\beta_{10} + \\beta_{10}X_{10}\\)\nstep 3 select single best method among M_0\n\n\n\nBackwards starts with all variables, remove variable with largest p-value\nBest subset https://stats.stackexchange.com/questions/20836/algorithms-for-automatic-model-selection/20856#20856\n(what about racing?)\nwhen we are using stepwise, we want to minimize training set MSE. sure, but what about the MSE for the test set?\n\n\n\n\n\n\nNote\n\n\n\nThe MSE for a test set is quadratic, where the MSE for a training set is negative linear.\n\n\nTraining MSE is generally an underestimate of the test MSE, where \\(MSE = RSS/n\\) In fitting a model to the training data using least squares: - regression coefficients are estimated so that RSS is as small as possible - training sets for RSS and \\(R^2\\) cannot be used\n\n\n\nIRL, stepwise is not the best to use.\nPulling out the highlights from the link:\n\n\nIt yields R-squared values that are badly biased to be high.\nThe F and chi-squared tests quoted next to each variable on the printout do not have the claimed distribution.\nThe method yields confidence intervals for effects and predicted values that are falsely narrow; see Altman and Andersen (1989).\nIt yields p-values that do not have the proper meaning, and the proper correction for them is a difficult problem.\nIt gives biased regression coefficients that need shrinkage (the coefficients for remaining variables are too large; see Tibshirani [1996]).\nIt has severe problems in the presence of collinearity.\nIt is based on methods (e.g., F tests for nested models) that were intended to be used to test prespecified hypotheses.\nIncreasing the sample size does not help very much; see Derksen and Keselman (1992).\nIt allows us to not think about the problem.\nIt uses a lot of paper.\n\n\n\n\n\nBig things to remember here: \\(C_p\\), \\(AIC\\), \\(BIC\\), and \\(R^2\\).\n\n\\(C_p\\)Akaike information criterion (AIC)Bayesian information criterion (BIC)Adjusted \\(R^2\\)\n\n\n\\(C_p = \\frac{1}{n}(RSS + 2d\\hat{\\sigma}^2)\\)\n\nd is number of predictors\n\\(\\sigma\\) is estimate of the variance of error for each response\n\\(2d\\hat{\\sigma}^2\\) is the penalty. penalty increase as number of predictors increase\n\nif \\(\\hat{\\sigma}^2\\) is unbiased estimate, then \\(C_p\\) is an unbiased estimate of test MSE\nwhat does bias mean? data bias? model bias? anything that is not a normal distribution?\nSmaller is better.\n\n\n\\(AIC = \\frac{1}{n\\hat{\\sigma}^2}(RSS + 2d\\hat{\\sigma}^2)\\) which simplifies to \\(AIC = \\frac{C_p}{\\hat{\\sigma}^2}\\)\n\ndirectly proportional to \\(C_p\\)\n\nSmaller is better.\n\n\n\\(BIC = \\frac{1}{n}(RSS + log(n)d\\hat{\\sigma}^2)\\)\npenalty is \\(log(n)d\\hat{\\sigma}^2)\\)\nbecuase it is using log, BIC penalizes large models more than AIC, which always uses the penalty of 2 (this is bc log(7))\nSmaller is better.\n\n\n$ R^2 = 1 - \n\nit can be negative, but that means thiings are going very bad. it cannot be greater than 1 (you can’t explain more than 100% of your model). negative values occur when your model is worse than just always guessing the average of all the data points More info on negative \\(R^2\\)\nMAXIMIZE!\n\n\n\n\n\n\nKinda like subset, but better. You try to make some of the coefficients to zero, aka shrinking them. Use all the predictors. Ridge regression and lasso are the most famous. (Don’t shrink the intercept, only the predictors.)\n\\[\ny = \\beta_0 + \\beta_1X_1 + ... + \\beta_pX_p\n\\]\nQ: can using a shrinkage method increase variance?\n\n\nFormula:\n\\[\n\\sum_i(y_i-\\beta_0-\\sum_j\\beta_jX_{ij})^2\n\\]\nRidge is good in terms of bias-variance trade off. As \\(\\lambda\\) increases, the flexibility of the ridge regression fit decreases, leading to decreased variance but increased bias.\n\\(\\lambda\\) if lambda is 0, the penalty is the same as the RSS. when lambda is greater than 0, RSS is greater.\nminimize this quanity, so each lambda\n\n\\(\\lambda\\sum\\beta_j^2\\) is shrinkage penalty\n\\(\\lambda\\) is tuning parameter\n\\(\\lambda \\ge 0\\)\n\nwhen \\(\\lambda = 0\\), it is just RSS\nThe coefficient estimate obtained by Ridge Regression are denoted \\(\\beta_\\lambda^R\\) for each \\(\\lambda\\)\nall these \\(\\beta_j^R\\) depend on \\(\\lambda\\) (\\(\\beta_j^R\\) <- is a vector when p > 1)\nselecting good value of \\(\\lambda\\) is critical (we will use cross validation) ridge uses the \\(l_2\\) norm is $||\\_2 = ||^2 $\na range of 0/least squares to least squares/least squares (1)\ncon: ridge retains all coefficients, no selection\n\n\n\non a scale of least squares to zero, how are you feeling today?\n\\[\n\\sum_i(y_i-\\beta_0-\\sum_j\\beta_jX_{ij})^2 +\\lambda\\sum_j|\\beta_j|\n\\]\nfunction of data, but also function of \\(\\lambda\\)\nfix \\(\\lambda\\) and then do minimization problem. if \\(\\lambda\\) is near 0, it esentially is just least squared. if the \\(\\lambda\\) approaches infinity, ridge coefficient estimates shrink to zero\nlasso uses \\(l_1\\) norm is $ ||\\_1 = ||$\nlasso does not retain all of the coefficients, so it is in fact a selection method\nOne obvious advantage of lasso regression over ridge regression, is that it produces simpler and more interpretable models that incorporate only a reduced set of the predictors."
+  },
+  {
+    "objectID": "project/ufo-sightings.html#read-in-data",
+    "href": "project/ufo-sightings.html#read-in-data",
+    "title": "cap5765 notes",
+    "section": "Read in data",
+    "text": "Read in data\nLet’s first set a seed for reproducibility and read in our UFO data.\n\nfrom siuba import *\nfrom siuba.siu import call\nimport pandas as pd\n\nraw = pd.read_csv(\n    \"https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv\"\n)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#what-does-this-data-look-like",
+    "href": "project/ufo-sightings.html#what-does-this-data-look-like",
+    "title": "cap5765 notes",
+    "section": "What does this data look like?",
+    "text": "What does this data look like?\n\nraw.columns\n\n\nraw.head(3)\n\n\nlen(raw)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#clean-data",
+    "href": "project/ufo-sightings.html#clean-data",
+    "title": "cap5765 notes",
+    "section": "Clean data",
+    "text": "Clean data\nWe will need to make sure these columns are all in the type that sklearn will be able to make sense of later, so let’s start by choosing a few columns to compute on. I chose to just look at UFOs seen in the United States, parsed the date, and set the state and ufo shape as categories. Then, I dropped columns with NA values. We see here the resulting data.\n\nufo_usa = (\n    raw\n    >> select(\n        -_.described_encounter_length, -_.city_area, -_.description, -_.date_documented\n    )\n    >> filter(_.country == \"us\")\n    >> separate(_.date_time, [\"date\", \"time\"], sep=\" \")\n    >> mutate(\n        date=call(pd.to_datetime, _.date),\n        state=_.state.astype(\"category\"),\n        ufo_shape=_.ufo_shape.astype(\"category\"),\n    )\n    >> select(-_.time, -_.country)\n).dropna()\nufo_usa.head(3)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#shape-distribution",
+    "href": "project/ufo-sightings.html#shape-distribution",
+    "title": "cap5765 notes",
+    "section": "Shape distribution",
+    "text": "Shape distribution\nIt might be useful to see how often each shape of UFO occurs. This could be important since different models work better or worse on imbalanced classes. Also, it is important when assessing model metrics. For example, while we might be impressed if a model has 90% accuracy, if the shape “oval” occurs 90% of the time, our model is performing no better than just guessing “oval” all the time.\n\nfrom plotnine import *\n\n(\n    ufo_usa\n    >> group_by(_.ufo_shape)\n    >> count()\n    >> ggplot(aes(\"ufo_shape\", \"n\"))\n    + geom_col()\n    + scale_x_discrete(limits=ufo_usa[\"ufo_shape\"].value_counts().index.tolist()[::-1])\n    + coord_flip()\n    + theme(axis_text_x=element_text(angle=90))\n    + labs(y=\"Count\", x=\"Shape\", title=\"Number of UFOs by Shape\")\n)\n\nThere is a wide variety of when shapes occur, from over 12,500 times to just once or twice."
+  },
+  {
+    "objectID": "project/ufo-sightings.html#grouping-the-other-shape",
+    "href": "project/ufo-sightings.html#grouping-the-other-shape",
+    "title": "cap5765 notes",
+    "section": "Grouping the “other” shape",
+    "text": "Grouping the “other” shape\nTo make this a litte easier to classify, let’s consider anything that occurs less than 2500 times to be the shape “other.”\n\nbottom_shapes = (\n    ufo_usa\n    >> group_by(_.ufo_shape)\n    >> count()\n    >> filter(_.n < 2500)\n    >> mutate(ufo_other=\"other\")\n)\n\njoined_df = full_join(\n    ufo_usa,\n    bottom_shapes,\n)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#modeling-train-test-splitting",
+    "href": "project/ufo-sightings.html#modeling-train-test-splitting",
+    "title": "cap5765 notes",
+    "section": "Modeling: train-test splitting",
+    "text": "Modeling: train-test splitting\nWith the data cleaned to our liking, we can move along to modeling. We will first start by breaking up this data into a training (85%) and testing (15%) set, so our model doesn’t “see” the answers when we are training it.\n\nfrom sklearn import impute, preprocessing, model_selection\nimport numpy\n\nnumpy.random.seed(500)\nX_train, X_test, y_train, y_test = model_selection.train_test_split(\n    clean_df.drop(columns=\"shape\"), clean_df[\"shape\"], test_size=0.15\n)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#modeling-preprocessing",
+    "href": "project/ufo-sightings.html#modeling-preprocessing",
+    "title": "cap5765 notes",
+    "section": "Modeling: preprocessing",
+    "text": "Modeling: preprocessing\nNext, we want to do some preprocessing. We have a mix of categorical and numerical features."
+  },
+  {
+    "objectID": "project/ufo-sightings.html#modeling-the-model",
+    "href": "project/ufo-sightings.html#modeling-the-model",
+    "title": "cap5765 notes",
+    "section": "Modeling: the model",
+    "text": "Modeling: the model\nFinally, we can get to the model itself. We will create a pipeline of the preprocessing step and a random forest classifier. I added extra trees and a warm start to hopefully boost the model’s performance. A warm start uses the solution of previously fitted models to better fit the next batch of decision trees, rather than training from scratch each time."
+  },
+  {
+    "objectID": "project/ufo-sightings.html#modeling-metrics",
+    "href": "project/ufo-sightings.html#modeling-metrics",
+    "title": "cap5765 notes",
+    "section": "Modeling: metrics",
+    "text": "Modeling: metrics\nNow, we get to see how well our model is performing!\n\nfrom sklearn import metrics\n\nclf_report = pd.DataFrame(\n    metrics.classification_report(\n        y_true=y_test, y_pred=clf.predict(X_test), output_dict=True\n    )\n)\nclf_report"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#version-the-model",
+    "href": "project/ufo-sightings.html#version-the-model",
+    "title": "cap5765 notes",
+    "section": "Version the model",
+    "text": "Version the model\nWhen experimenting with this model, I had a lot of different iterations! We can use something called model versioning to keep track of each model.\n\nfrom vetiver import VetiverModel, vetiver_pin_write\nimport pins\n\nv = VetiverModel(\n    clf,\n    \"ufo\",\n    ptype_data=X_train,\n    # metadata={\n    #     \"preprocessing\": {\"cat\": [\"ordinal_encoder\"], \"num\": [\"scaler\", \"imputer\"]},\n    #     \"clf_report\": clf_report.to_json(),\n    # },\n)\nboard = pins.board_folder(\".\", allow_pickle_read=True)\nvetiver_pin_write(board, v)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#section",
+    "href": "project/ufo-sightings.html#section",
+    "title": "cap5765 notes",
+    "section": "",
+    "text": "Then, we will join the custom labeled data frame and original data frame, and drop the now unnecessary columns.\n\nfrom siuba.dply.vector import coalesce\n\nclean_df = (\n    joined_df\n    >> mutate(shape=coalesce(_.ufo_other, _.ufo_shape))\n    >> select(-_.ufo_shape, -_.ufo_other, -_.n)\n)\nclean_df\n\nWe will once again peek at the distribution of UFO shapes.\n\n(\n    clean_df\n    >> group_by(_.shape)\n    >> count()\n    >> ggplot(aes(\"shape\", \"n\"))\n    + geom_col()\n    + scale_x_discrete(limits=clean_df[\"shape\"].value_counts().index.tolist()[::-1])\n    + coord_flip()\n    + theme(axis_text_x=element_text(angle=90))\n    + labs(y=\"Count\", x=\"Shape\", title=\"Number of UFOs by Shape\")\n)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#section-1",
+    "href": "project/ufo-sightings.html#section-1",
+    "title": "cap5765 notes",
+    "section": "",
+    "text": "We will start by making the categorical features (state) machine readable by using an ordinal encoder. This will map each category in a column to an integer (eg. ‘IL’ = 0, ‘FL’ = 1, ‘NY’ = 2, and so on). The downfall of this is that it will create interactions between variables that do not exist (eg. FL*2 does not equal NY). However, if we choose a different encoder, such as a one-hot encoder, our data will become highly dimensional, which may cause weak performance. In training, I experimented with both types of encoders, and the ordinal encoder seemed to perform better, which makes sense due to the lower dimensionality in the data.\nFor the numeric features, we will scale them using a standard scaler. For any missing values, we will use an imputer that will replace the missing value with the mean of the column."
+  },
+  {
+    "objectID": "project/ufo-sightings.html#section-2",
+    "href": "project/ufo-sightings.html#section-2",
+    "title": "cap5765 notes",
+    "section": "",
+    "text": "We will put these in a single preprocessor variable, and make a column transformer that will select what preprocessing based on the type of the column.\n\nfrom sklearn import impute, preprocessing, pipeline\nfrom sklearn.compose import make_column_selector as selector\nfrom sklearn.compose import make_column_transformer\n\ncat_pipe = preprocessing.OrdinalEncoder()\n\nnum_pipe = pipeline.make_pipeline(\n    preprocessing.StandardScaler(), impute.SimpleImputer(strategy=\"mean\")\n)\n\npreprocessor = make_column_transformer(\n    (cat_pipe, selector(dtype_include=\"category\")),\n    (num_pipe, selector(dtype_include=\"number\")),\n    n_jobs=2,\n)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#section-3",
+    "href": "project/ufo-sightings.html#section-3",
+    "title": "cap5765 notes",
+    "section": "",
+    "text": "from sklearn import ensemble, pipeline\n\nclf = pipeline.Pipeline(\n    steps=[\n        (\"preprocessor\", preprocessor),\n        (\n            \"classifier\",\n            ensemble.RandomForestClassifier(n_estimators=100, warm_start=True),\n        ),\n    ]\n)\n\nclf.fit(X_train, y_train)"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#section-4",
+    "href": "project/ufo-sightings.html#section-4",
+    "title": "cap5765 notes",
+    "section": "",
+    "text": "board.pin_versions(\"ufo\")\n\nWe can even read back previous versions, and see information stored about them."
+  },
+  {
+    "objectID": "project/ufo-sightings.html#read-previous-version",
+    "href": "project/ufo-sightings.html#read-previous-version",
+    "title": "cap5765 notes",
+    "section": "Read previous version",
+    "text": "Read previous version\n\nimport vetiver\n\nv2 = VetiverModel.from_pin(board=board, name=\"ufo\", version='20221214T232049Z-a7603')\nv2.metadata"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#launch-api",
+    "href": "project/ufo-sightings.html#launch-api",
+    "title": "cap5765 notes",
+    "section": "Launch API",
+    "text": "Launch API\nIf we want to run this model as a service at a local API endpoint, we can do so using vetiver as well.\n\nfrom vetiver import VetiverAPI\n\nVetiverAPI(v2).run()"
+  },
+  {
+    "objectID": "project/ufo-sightings.html#create-dockerfile-and-accessory-files",
+    "href": "project/ufo-sightings.html#create-dockerfile-and-accessory-files",
+    "title": "cap5765 notes",
+    "section": "Create Dockerfile and accessory files",
+    "text": "Create Dockerfile and accessory files\nFinally, we can also quickly dockerize this model with helper functions.\n\nvetiver.prepare_docker(board=board, pin_name=\"ufo\")"
   }
 ]

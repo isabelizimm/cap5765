@@ -1,0 +1,269 @@
+---
+jupyter: python3
+execute:
+  eval: false
+  echo: true
+format: revealjs
+---
+
+## Read in data
+
+Let's first set a seed for reproducibility and read in our [UFO data](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv).
+
+```{python}
+from siuba import *
+from siuba.siu import call
+import pandas as pd
+
+raw = pd.read_csv(
+    "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv"
+)
+```
+
+## What does this data look like?
+
+```{python}
+raw.columns
+```
+
+```{python}
+raw.head(3)
+```
+
+```{python}
+len(raw)
+```
+
+## Clean data
+
+We will need to make sure these columns are all in the type that `sklearn` will be able to make sense of later, so let's start by choosing a few columns to compute on. I chose to just look at UFOs seen in the United States, parsed the date, and set the state and ufo shape as categories. Then, I dropped columns with NA values. We see here the resulting data.
+
+```{python}
+ufo_usa = (
+    raw
+    >> select(
+        -_.described_encounter_length, -_.city_area, -_.description, -_.date_documented
+    )
+    >> filter(_.country == "us")
+    >> separate(_.date_time, ["date", "time"], sep=" ")
+    >> mutate(
+        date=call(pd.to_datetime, _.date),
+        state=_.state.astype("category"),
+        ufo_shape=_.ufo_shape.astype("category"),
+    )
+    >> select(-_.time, -_.country)
+).dropna()
+ufo_usa.head(3)
+```
+
+## Shape distribution
+
+It might be useful to see how often each shape of UFO occurs. This could be important since different models work better or worse on imbalanced classes. Also, it is important when assessing model metrics. For example, while we might be impressed if a model has 90% accuracy, if the shape "oval" occurs 90% of the time, our model is performing no better than just guessing "oval" all the time.
+
+```{python}
+from plotnine import *
+
+(
+    ufo_usa
+    >> group_by(_.ufo_shape)
+    >> count()
+    >> ggplot(aes("ufo_shape", "n"))
+    + geom_col()
+    + scale_x_discrete(limits=ufo_usa["ufo_shape"].value_counts().index.tolist()[::-1])
+    + coord_flip()
+    + theme(axis_text_x=element_text(angle=90))
+    + labs(y="Count", x="Shape", title="Number of UFOs by Shape")
+)
+```
+
+There is a wide variety of when shapes occur, from over 12,500 times to just once or twice.
+
+## Grouping the "other" shape
+
+To make this a litte easier to classify, let's consider anything that occurs less than 2500 times to be the shape "other."
+
+```{python}
+bottom_shapes = (
+    ufo_usa
+    >> group_by(_.ufo_shape)
+    >> count()
+    >> filter(_.n < 2500)
+    >> mutate(ufo_other="other")
+)
+
+joined_df = full_join(
+    ufo_usa,
+    bottom_shapes,
+)
+```
+
+##
+
+Then, we will join the custom labeled data frame and original data frame, and drop the now unnecessary columns.
+
+```{python}
+from siuba.dply.vector import coalesce
+
+clean_df = (
+    joined_df
+    >> mutate(shape=coalesce(_.ufo_other, _.ufo_shape))
+    >> select(-_.ufo_shape, -_.ufo_other, -_.n)
+)
+clean_df
+```
+
+We will once again peek at the distribution of UFO shapes.
+
+```{python}
+(
+    clean_df
+    >> group_by(_.shape)
+    >> count()
+    >> ggplot(aes("shape", "n"))
+    + geom_col()
+    + scale_x_discrete(limits=clean_df["shape"].value_counts().index.tolist()[::-1])
+    + coord_flip()
+    + theme(axis_text_x=element_text(angle=90))
+    + labs(y="Count", x="Shape", title="Number of UFOs by Shape")
+)
+```
+
+## Modeling: train-test splitting
+
+With the data cleaned to our liking, we can move along to modeling. We will first start by breaking up this data into a training (85%) and testing (15%) set, so our model doesn't "see" the answers when we are training it.
+
+```{python}
+from sklearn import impute, preprocessing, model_selection
+import numpy
+
+numpy.random.seed(500)
+X_train, X_test, y_train, y_test = model_selection.train_test_split(
+    clean_df.drop(columns="shape"), clean_df["shape"], test_size=0.15
+)
+```
+
+## Modeling: preprocessing
+
+Next, we want to do some preprocessing. We have a mix of categorical and numerical features.
+
+##
+
+We will start by making the categorical features (state) machine readable by using an [ordinal encoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OrdinalEncoder.html). This will map each category in a column to an integer (eg. 'IL' = 0, 'FL' = 1, 'NY' = 2, and so on). The downfall of this is that it will create interactions between variables that do not exist (eg. FL\*2 does not equal NY). However, if we choose a different encoder, such as a one-hot encoder, our data will become highly dimensional, which may cause weak performance. In training, I experimented with both types of encoders, and the ordinal encoder seemed to perform better, which makes sense due to the lower dimensionality in the data.
+
+For the numeric features, we will scale them using a standard scaler. For any missing values, we will use an imputer that will replace the missing value with the mean of the column.
+
+##
+
+We will put these in a single `preprocessor` variable, and make a column transformer that will select what preprocessing based on the type of the column.
+
+```{python}
+from sklearn import impute, preprocessing, pipeline
+from sklearn.compose import make_column_selector as selector
+from sklearn.compose import make_column_transformer
+
+cat_pipe = preprocessing.OrdinalEncoder()
+
+num_pipe = pipeline.make_pipeline(
+    preprocessing.StandardScaler(), impute.SimpleImputer(strategy="mean")
+)
+
+preprocessor = make_column_transformer(
+    (cat_pipe, selector(dtype_include="category")),
+    (num_pipe, selector(dtype_include="number")),
+    n_jobs=2,
+)
+```
+
+## Modeling: the model
+
+Finally, we can get to the model itself. We will create a pipeline of the preprocessing step and a random forest classifier. I added extra trees and a warm start to hopefully boost the model's performance. A warm start uses the solution of previously fitted models to better fit the next batch of decision trees, rather than training from scratch each time.
+
+##
+
+```{python}
+from sklearn import ensemble, pipeline
+
+clf = pipeline.Pipeline(
+    steps=[
+        ("preprocessor", preprocessor),
+        (
+            "classifier",
+            ensemble.RandomForestClassifier(n_estimators=100, warm_start=True),
+        ),
+    ]
+)
+
+clf.fit(X_train, y_train)
+```
+
+## Modeling: metrics
+
+Now, we get to see how well our model is performing!
+
+```{python}
+from sklearn import metrics
+
+clf_report = pd.DataFrame(
+    metrics.classification_report(
+        y_true=y_test, y_pred=clf.predict(X_test), output_dict=True
+    )
+)
+clf_report
+```
+
+## Version the model
+
+When experimenting with this model, I had a lot of different iterations! We can use something called model versioning to keep track of each model.
+
+```{python}
+from vetiver import VetiverModel, vetiver_pin_write
+import pins
+
+v = VetiverModel(
+    clf,
+    "ufo",
+    ptype_data=X_train,
+    # metadata={
+    #     "preprocessing": {"cat": ["ordinal_encoder"], "num": ["scaler", "imputer"]},
+    #     "clf_report": clf_report.to_json(),
+    # },
+)
+board = pins.board_folder(".", allow_pickle_read=True)
+vetiver_pin_write(board, v)
+```
+
+##
+
+```{python}
+board.pin_versions("ufo")
+```
+
+We can even read back previous versions, and see information stored about them.
+
+## Read previous version
+
+```{python}
+import vetiver
+
+v2 = VetiverModel.from_pin(board=board, name="ufo", version='20221214T232049Z-a7603')
+v2.metadata
+```
+
+## Launch API
+
+If we want to run this model as a service at a local API endpoint, we can do so using vetiver as well.
+
+```{python}
+from vetiver import VetiverAPI
+
+VetiverAPI(v2).run()
+```
+
+## Create Dockerfile and accessory files
+
+Finally, we can also quickly dockerize this model with helper functions.
+
+```{python}
+vetiver.prepare_docker(board=board, pin_name="ufo")
+```
+

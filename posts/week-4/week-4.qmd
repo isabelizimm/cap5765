@@ -1,7 +1,0 @@
----
-format: html
-title: "wk 4 recap"
----
-
-to be updated w notes
-(how to do tidymodels)
