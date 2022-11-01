@@ -2,24 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.0.35">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 9: knn + pca</title>
+<title>cap5765 notes - wk 1: vocab and linear algebra</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -58,7 +53,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
+code span.bu { } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -71,7 +66,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.im { } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -132,11 +127,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+      <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">cap5765 notes</span>
-    </a>
-  </div>
+  </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -165,7 +158,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 9: knn + pca</h1>
+      <h1 class="title">wk 1: vocab and linear algebra</h1>
                       </div>
   </div>
     
@@ -187,108 +180,126 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<section id="knn" class="level1">
-<h1>KNN</h1>
-<p>knn is literally looking at a data point and peeking at the classifcations of its neighbors, then making a guess. ie, <span class="math inline">\(N_0\)</span> = {1,2,3} where {1,2,3} are the 3 closest points by euclidean distance</p>
-<p>the proper algorithm is:</p>
-<p><span class="math inline">\(Pr(Y=k|X=x_0)=\frac{1}{K}\sum_{i\in N_0}I(y_i=k)\)</span> if 1=red, 2=red, 3=yellow, then <span class="math inline">\(Pr=\frac{2}{3}\)</span></p>
-<p>what happens if neighbor only has one point?</p>
-<p>what if no neighbors? only goes off itself, if 1 neighbor</p>
-<p>k is usually odd to avoid ties</p>
-<p>its not really modeling, it just queries training data for new points</p>
-</section>
-<section id="what-is-the-black-box-model" class="level1">
-<h1>what is the black box model?</h1>
-<p>you can’t see the inner workings of a model when you are using it in code…even models that are really not considered to be black box (ie, linear regression) can act as black boxes in practice.</p>
-</section>
-<section id="pca" class="level1">
-<h1>PCA</h1>
-<p>main goals: identify pattern in data</p>
-<p>detect correlation btwn variables</p>
-<p>strong correlation-&gt; tries to reduce the dimensionality</p>
-<p>finding the maximum variance in high dimensionality data and project to a smaller subspace while retaining most of the info</p>
-<p>summary of PCA:</p>
+<p>“A good model is one that accurately predicts the outcome.”</p>
+<p>Learning primer:</p>
+<p>On types of data:</p>
+<pre><code>- Unstructured data does not follow any rhyme or reason
+- Semi-structured has some consitency, but no precise structure
+- Structured data has persistent order</code></pre>
+<p>On model outputs:</p>
+<pre><code>- Quantitative data can be measured (numeric)
+- Qualitative data is descriptive (categorical) but qualitatative</code></pre>
+<p>On types of model:</p>
+<pre><code>- Supervised learning is labeled data
+    - Some issues in supervised learning could be overfitting
+- Unsupervised learning is unlabeled data
+    - Some issues could be know</code></pre>
+<p>matricies: rectangular array, size (row, column) special &lt;3 for SQUARE (n,n) matricies</p>
+<p><span class="math display">\[
+A=[a_{ij}]
+\]</span></p>
+<p>(the entry on row i and column j of matrix A)</p>
+<p>if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are the same size,</p>
+<p><span class="math inline">\(A + B\)</span></p>
+<p><span class="math inline">\(B - B\)</span></p>
+<p><span class="math inline">\(cA + rB\)</span> &lt;- this is also called a linear combination of A and B</p>
+<p><span class="math display">\[A = \begin{bmatrix}
+1 &amp; -1 &amp; 1\\
+0 &amp; 2 &amp; 4
+\end{bmatrix}
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> [[<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>],[<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">4</span>]]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> [[<span class="dv">2</span>,<span class="op">-</span><span class="dv">10</span>,<span class="dv">7</span>], [<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">6</span>]]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>A<span class="op">+</span><span class="dv">2</span><span class="op">*</span>B <span class="co"># okay, this actually doesn't work</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1, -1, 1], [0, 2, 4], [2, -10, 7], [3, 8, 6], [2, -10, 7], [3, 8, 6]]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>matrix1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">9</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">6</span>), <span class="at">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>matrix2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>matrix1<span class="sc">*</span>matrix2 <span class="co"># OKAY THIS DOESNT WORK EITHER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]   15    0    6
+[2,]   18   36   24</code></pre>
+</div>
+</div>
+<section id="matrix-multiplication" class="level1">
+<h1>Matrix multiplication</h1>
+<p>dot product result is ALWAYS A NUMBER - use dot product to create matrix multiplication</p>
+<p>Notation:</p>
 <ul>
-<li>standardize/normalize the data</li>
-<li>obtain the eigenvector eigenspaces from covariance matrix</li>
-<li>perform singular value decomposition (SVD)</li>
-<li>sort eigenvalues in decreasing order and choose k largest eigenvalues, where k is # of dimensions of new feature subspaces</li>
-<li>transform the original data set X variables to obtain feature subspace Y</li>
+<li>Quantitative output: Y</li>
+<li>Qualitative output: G</li>
+<li>Matrix: <strong>A</strong></li>
 </ul>
-<p>to understand after: largest eigenvalues is largest variety, explain variance of data in the new features (this is kinda like <span class="math inline">\(R^2\)</span>?)</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<p>Linear Models: - you would use regression for numerical - you would use classification for</p>
+<p><span class="math display">\[
+y = mx+b
+\]</span></p>
+<p>where x = input y = output w = <span class="math inline">\(\begin{bmatrix} m \\ b \end{bmatrix}\)</span></p>
+<p>goal is to make the line of best fit of the weights</p>
+<p>Given input vector <span class="math inline">\(X^T = (X_1, X_2, ..., X_p)\)</span> we predict <span class="math inline">\(Y\)</span> by</p>
+<p><span class="math display">\[
+\hat{Y}= \hat{B} + (X_1\hat{B_1}+ X_1\hat{B_2} + ... + X_p\hat{B_p})
+\]</span></p>
+<p><span class="math display">\[
+\hat{Y}= \sum_{j=1}^PX_j\hat{B_j}
+\]</span></p>
+<p>where $ $ is the intercept.</p>
+<p>If you have a vector <span class="math inline">\(X=\begin{bmatrix}X_1 \\ X_2 \\ ... \\ X_p\end{bmatrix}\)</span></p>
+<p>linear model is</p>
+<p><span class="math display">\[
+f(x) = X^T\hat{B}
+\]</span></p>
+<p>but many different techniques to have flavors of linear modesl</p>
+<p><span class="math display">\[
+Error = y - \hat{Y}
+\]</span></p>
+<p>How to tell if your model is doing well:</p>
+<p><em>Residual sum square of errors and least square</em> we pick coefficients (weights), <span class="math inline">\(\hat{B}\)</span> to minimize the RSS</p>
+<p><span class="math display">\[
+RSS(\hat{B})= \sum_{j=1}^N(y_j-x_j^T\hat{B})^2
+\]</span></p>
+<p>Simple linear regression:</p>
+<p><span class="math display">\[
+Y = \beta_0 + \beta_1X + \epsilon
+\]</span></p>
+<p>where <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are unknown</p>
+<p><span class="math display">\[
+\hat{y}=\hat{B_0} + \hat{B_1}x
+\]</span></p>
+<p><span class="math display">\[
+\hat{y_i}=\hat{B_0} + \hat{B_1}x_i
+\]</span></p>
+<p>(is the prediction of Y based on x_i)</p>
+<p><span class="math display">\[
+e_i = y_i - \hat{y_i}
+\]</span></p>
+<div class="callout-important callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Tip
+Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>what is the difference btwn correlation and covariance? they are the same, but <a href="https://socratic.org/questions/what-is-the-difference-between-a-correlation-matrix-and-a-covariance-matrix-1">correlation is scaled</a></p>
+<p>where <span class="math inline">\(y_i\)</span> is actual and <span class="math inline">\(\hat{y_i}\)</span> is predicted</p>
 </div>
 </div>
-<p>reduce dimensions and create fewer ones allow for viz many dimensions in 2 dim, or preprocessing for models that cant take high dimensions</p>
-<p>ends up being a normalized linear combination of features.</p>
-<p>first principal component of a set of features <span class="math inline">\(X_1, X_2, ..., X_p\)</span> is the normalized linear combination of the features</p>
+<p>The least sqaure is</p>
 <p><span class="math display">\[
-Z_1 = \phi_{11} X_1 + \phi_{21} X_2 + ... + \phi_{p1}X_p
+\hat{\beta_1} = \frac{\sum_{j=1}^N[(x_i-\bar{x})(y_i-\bar{y})]}{\sum_{i=1}^N(x_i-\bar{x})^2}
 \]</span></p>
-<p>that has the largest variance</p>
-<p>We mean that normalized that <span class="math inline">\(\sum_{j=1}^p \phi_{j1}^2 = 1\)</span>.</p>
-<p>we refer to <span class="math inline">\(\phi_{11}, ..., \phi_{p1}\)</span> as the loadings of the first principal component.</p>
-<p>And think of them as the loading vector <span class="math inline">\(\phi_1\)</span></p>
-<p>Assuming we have a <span class="math inline">\(n \times p\)</span> data set <span class="math inline">\(\mathbf{X}\)</span></p>
-<p>since we are only interested in the variance we assume that the variables have been centered</p>
 <p><span class="math display">\[
-\underset{\phi_{11}, ..., \phi_{p1}}{\text{maximize}} \left\{ \dfrac{1}{n} \sum^n_{i=j} \left( \sum^p_{j=1} \phi_{j1}x_{ij} \right)^2 \right\} \quad \text{subject to} \quad \sum_{j=1}^p  \phi_{j1}^2 = 1
+\hat{\beta_0} = \bar{y}-\hat{\beta_1}\bar{x}
 \]</span></p>
-<p>(m&lt;p) still thinking about <span class="math inline">\(R^2\)</span>– so would you be able to use this? if PCA is essentially trying to figure out how to capture variance and is represented by explained variance, and <span class="math inline">\(R^2\)</span> is a measure of explained variance…</p>
-<p>PCR -&gt; principal component analysis using regression</p>
-<p>$ y = _0 + _1Z_1 + _2Z_2$ is the linear regression using PCA components <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span></p>
-<p>tldr; create new variables that are linear combinations of original variables linear combinations are uncorrelated new variables are principal components</p>
-<p><a href="https://www.mikulskibartosz.name/pca-how-to-choose-the-number-of-components/">how to choose number of components?</a></p>
-<p>geometric explanation of PCA: you usually center and scale</p>
-<p>the more correlated the original data, the better this line (first component) will explain the actual values of the observed measurements–goal is to minimize sum of residuals (distance from origin to projected point is called the “score”)</p>
-<p>find the first latent variable == first principal component</p>
-<p>would you use PCA and then stop? or would you usually use it as feature engineering and then continue on</p>
-<p>Knowing relation btwn maximizing variance and how this is related to minimize residual</p>
-<section id="what-is-svd" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-svd">what is SVD</h3>
-<p>singular value decomposition use it on covariance matricies, guarantee you find the <span class="math inline">\(Z_1\)</span> has maximum variance, since it has the largest eigenvalue second component <span class="math inline">\(Z_2\)</span> will be orthogonal to <span class="math inline">\(Z_1\)</span>, so it will be second largest variance and NOT CORRELATED with <span class="math inline">\(Z_1\)</span> also reducing the dimension</p>
-</section>
-</section>
-<section id="on-covariance" class="level1">
-<h1>On covariance</h1>
-<p>correlation matrix is between -1 and 1. covariance any number.</p>
-<p>covariance is practical esp w mulitvariate issues.</p>
-<p>variance: each value subtracted from mean of that variable, differences squared, divided by number of values in that variable</p>
-<p>so <strong>CO</strong>variance is calculated between different variables: values of both variables are multiplied by taking the difference from the mean and diving by number of values cov(x,x) = var(x)</p>
-<p><img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Ftowardsdatascience.com%2F5-things-you-should-know-about-covariance-26b12a0516f1&amp;psig=AOvVaw0mAtlZPNx_RLXe8BObd1Q6&amp;ust=1666370659392000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCPjpncyg7_oCFQAAAAAdAAAAABAD" class="img-fluid"></p>
-<p>positive: positive relationship, variate in the same direction</p>
-<p>negative: negative relationship between 2 variables, variate in opposite directions</p>
-<p>zero: no relation between data</p>
-<p>size of a covariance value: not scaled, so just bc numbers are high doesn’t mean that the covariance is high</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">13</span>, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">2</span>, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">11</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ev <span class="ot">&lt;-</span> <span class="fu">eigen</span>(A)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> ev<span class="sc">$</span>values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ev<span class="sc">$</span>vectors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           [,1]       [,2]      [,3]
-[1,]  0.7453560  0.6666667 0.0000000
-[2,] -0.5962848  0.6666667 0.4472136
-[3,]  0.2981424 -0.3333333 0.8944272</code></pre>
-</div>
-</div>
-<p>eigenvalues and eigenvectors of covariance matrix eigenvalues find magnitude and spread of data points when cov = 0, eigenvalues directly equal to variance values eigenvectors show direction</p>
-<p>use these in PCA and LDA :D</p>
-<p>quiz on PCA + covariance not coding</p>
 
 
 </section>
@@ -363,8 +374,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 6 recap</title>
+<title>cap5765 notes - wk 11: tree based</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,6 +59,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -101,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 6 recap</h1>
+      <h1 class="title">wk 11: tree based</h1>
                       </div>
   </div>
     
@@ -123,9 +124,35 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>hurricane ian! no classes</p>
+<section id="tree-based-methods" class="level1">
+<h1>tree based methods</h1>
+<p>simple, yet powerful</p>
+<p>define a space by evaluating a tree</p>
+<p>very explainable for simple models</p>
+<p>Every observation that falls into a region will have the same prediction, and that prediction will be based on the observations in that region</p>
+<p><strong>Regression</strong>: mean value <strong>Classification</strong>: most common value</p>
+<section id="cart" class="level2">
+<h2 class="anchored" data-anchor-id="cart">cart</h2>
+<p>greedy algorithm tree based regression and classification method:</p>
+<p>use recursive binary splitting approach (looks at 2 things at a time)</p>
+<p><span class="math display">\[
+\sum_{i=1}^N
+\]</span></p>
+<p>is this also kind of a shrinkage method?</p>
+<p>big trees tend to overfit, so you try to grow a large tree– split until you have a minimum number points in each region, and then prune according to some criteria (cost-complexity pruning)</p>
+<p>use k-fold cross validation to choose <span class="math inline">\(\alpha\)</span></p>
+<p>classification: looking at proportions, but will classify by majority class</p>
+</section>
+<section id="impurity-measures" class="level2">
+<h2 class="anchored" data-anchor-id="impurity-measures">impurity measures</h2>
+<p>misclassification error: <span class="math inline">\(1-p_m\)</span></p>
+<p><img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.researchgate.net%2Ffigure%2FThe-relation-between-Gini-impurity-Entropy-and-misclassification-error-22_fig3_357424165&amp;psig=AOvVaw2rY4NKeTmOBWkoa2bO1Eq9&amp;ust=1667410836591000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCLDOtMrDjfsCFQAAAAAdAAAAABAb" class="img-fluid"></p>
+<p>gini index:</p>
+<p>cross-entropy or deviance:</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -2,24 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.0.35">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 1: vocab and linear algebra</title>
+<title>cap5765 notes - wk 2: linear regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
-  vertical-align: middle;
-}
 </style>
 
 
@@ -69,11 +64,9 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+      <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">cap5765 notes</span>
-    </a>
-  </div>
+  </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -102,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 1: vocab and linear algebra</h1>
+      <h1 class="title">wk 2: linear regression</h1>
                       </div>
   </div>
     
@@ -124,183 +117,138 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>“A good model is one that accurately predicts the outcome.” (sometimes)</p>
-<p>Learning primer:</p>
-<p>On types of data:</p>
-<pre><code>- Unstructured data does not follow any rhyme or reason
-- Semi-structured has some consitency, but no precise structure
-- Structured data has persistent order</code></pre>
-<p>On model outputs:</p>
-<pre><code>- Quantitative data can be measured (numeric)
-- Qualitative data is descriptive (categorical) but qualitatative</code></pre>
-<p>On types of model:</p>
-<pre><code>- Supervised learning is labeled data
-    - Some issues in supervised learning could be overfitting
-- Unsupervised learning is unlabeled data
-    - Some issues could be know</code></pre>
-<p>matricies: rectangular array, size (row, column) special &lt;3 for SQUARE (n,n) matricies</p>
+<section id="linear-regression" class="level1">
+<h1>Linear regression</h1>
+<p>Linear regression is a fabulous place to start with statistical learning. The math is (relatively) simple, but it can feel like there’s a lot of moving parts if you’re new to all this. In general, we want to know 3 things this week about linear regression: <a href="#create-the-line">create the best line possible</a>, <a href="#assess-coefficient-estimates">assess the coefficients</a> and <a href="#assessing-overall-accuracy-of-the-model">know if we did a good job</a>.</p>
+<p><img src="https://miro.medium.com/max/1400/1*N1-K-A43_98pYZ27fnupDA.jpeg" class="img-fluid"></p>
+<section id="create-the-line" class="level2">
+<h2 class="anchored" data-anchor-id="create-the-line">Create the line</h2>
+<p>The formula for least squares is:</p>
 <p><span class="math display">\[
-A=[a_{ij}]
+Y \approx \beta_0 + \beta_1X
 \]</span></p>
-<p>(the entry on row i and column j of matrix A)</p>
-<p>if <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are the same size,</p>
-<p><span class="math inline">\(A + B\)</span></p>
-<p><span class="math inline">\(B - B\)</span></p>
-<p><span class="math inline">\(cA + rB\)</span> &lt;- this is also called a linear combination of A and B</p>
-<p><span class="math display">\[A = \begin{bmatrix}
-1 &amp; -1 &amp; 1\\
-0 &amp; 2 &amp; 4
-\end{bmatrix}
-\]</span></p>
-<p>If you’re like me and immediately think “oh yeah, I’m going to mae a computer do that,” be forewarned–</p>
-<p>Python:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[[1, -1, 1], [0, 2, 4], [2, -10, 7], [3, 8, 6], [2, -10, 7], [3, 8, 6]]</code></pre>
-</div>
-</div>
-<p>R:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>     [,1] [,2] [,3]
-[1,]   15    0    6
-[2,]   18   36   24</code></pre>
-</div>
-</div>
-<p>So neither of these languages support matrix multiplication the way you multiply numbers. How do we do this?</p>
-<p>Python:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[[1, -1, 1], [0, 2, 4], [2, -10, 7], [3, 8, 6], [2, -10, 7], [3, 8, 6]]</code></pre>
-</div>
-</div>
-<p>R:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>     [,1] [,2] [,3]
-[1,]   15    0    6
-[2,]   18   36   24</code></pre>
-</div>
-</div>
-<section id="matrix-multiplication" class="level1">
-<h1>Matrix multiplication</h1>
-<p>dot product result is ALWAYS A NUMBER - use dot product to create matrix multiplication</p>
-<p>Notation:</p>
-<ul>
-<li>Quantitative output: Y</li>
-<li>Qualitative output: G</li>
-<li>Matrix: <strong>A</strong></li>
-</ul>
-<p>Linear Models: - you would use regression for numerical - you would use classification for</p>
-<p><span class="math display">\[
-y = mx+b
-\]</span></p>
-<p>where x = input y = output w = <span class="math inline">\(\begin{bmatrix} m \\ b \end{bmatrix}\)</span></p>
-<p>goal is to make the line of best fit of the weights</p>
-<p>Given input vector <span class="math inline">\(X^T = (X_1, X_2, ..., X_p)\)</span> we predict <span class="math inline">\(Y\)</span> by</p>
-<p><span class="math display">\[
-\hat{Y}= \hat{B} + (X_1\hat{B_1}+ X_1\hat{B_2} + ... + X_p\hat{B_p})
-\]</span></p>
-<p><span class="math display">\[
-\hat{Y}= \sum_{j=1}^PX_j\hat{B_j}
-\]</span></p>
-<p>where $ $ is the intercept.</p>
-<p>If you have a vector <span class="math inline">\(X=\begin{bmatrix}X_1 \\ X_2 \\ ... \\ X_p\end{bmatrix}\)</span></p>
-<p>linear model is</p>
-<p><span class="math display">\[
-f(x) = X^T\hat{B}
-\]</span></p>
-<p>but many different techniques to have flavors of linear modesl</p>
-<p><span class="math display">\[
-Error = y - \hat{Y}
-\]</span></p>
-<p>How to tell if your model is doing well:</p>
-<p><em>Residual sum square of errors and least square</em> we pick coefficients (weights), <span class="math inline">\(\hat{B}\)</span> to minimize the RSS</p>
-<p><span class="math display">\[
-RSS(\hat{B})= \sum_{j=1}^N(y_j-x_j^T\hat{B})^2
-\]</span></p>
-<p>Simple linear regression:</p>
-<p><span class="math display">\[
-Y = \beta_0 + \beta_1X + \epsilon
-\]</span></p>
-<p>where <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are unknown</p>
-<p><span class="math display">\[
-\hat{y}=\hat{B_0} + \hat{B_1}x
-\]</span></p>
-<p><span class="math display">\[
-\hat{y_i}=\hat{B_0} + \hat{B_1}x_i
-\]</span></p>
-<p>(is the prediction of Y based on x_i)</p>
-<p><span class="math display">\[
-e_i = y_i - \hat{y_i}
-\]</span></p>
-<div class="callout-important callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>where <span class="math inline">\(y_i\)</span> is actual and <span class="math inline">\(\hat{y_i}\)</span> is predicted</p>
-</div>
-</div>
-<p>The least sqaure is</p>
+<p>So we want to calculate out two things: <span class="math inline">\(\beta_0\)</span> (intercept) and <span class="math inline">\(\beta_1\)</span> (slope).</p>
+<p>Here are the formulas:</p>
 <p><span class="math display">\[
 \hat{\beta_1} = \frac{\sum_{j=1}^N[(x_i-\bar{x})(y_i-\bar{y})]}{\sum_{i=1}^N(x_i-\bar{x})^2}
 \]</span></p>
 <p><span class="math display">\[
 \hat{\beta_0} = \bar{y}-\hat{\beta_1}\bar{x}
 \]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This course involves a lot of math, and variables. It’s hard to keep them straight if you’re not used to looking at a lot of statistics.</p>
+<p>Bars (<span class="math inline">\(\bar{x}\)</span>) are for means. Think of 😐 being a mean face.</p>
+<p>Hats (<span class="math inline">\(\hat{x}\)</span>) are for estimated numbers. Think of <span class="math inline">\(\hat{y}_0\)</span> as wearing a hat to cosplay as their best guess of what <span class="math inline">\(y_0\)</span> looks like 🤠 (sometimes y is not very good at cosplaying).</p>
+</div>
+</div>
+<p>These equations really involve just plugging in numbers, which our program is mostly going to do, so let’s not be too concerned with this right now.</p>
+</section>
+<section id="assess-coefficient-estimates" class="level2">
+<h2 class="anchored" data-anchor-id="assess-coefficient-estimates">Assess coefficient estimates</h2>
+<p>Rounding up a few key points:</p>
+<ul>
+<li>The difference between <span class="math inline">\(\hat{y}_i\)</span> and <span class="math inline">\(y_i\)</span> is <span class="math inline">\(e_1\)</span>. This is the distance between the actual data point and our model.</li>
+</ul>
+<p>One way to know how well our coefficients might perform is finding the standard error of an estimator to see how it varies under repeated sampling.</p>
+<p><span class="math display">\[
+SE(\hat{\beta}_1)^2 = \frac{\theta^2}{\sum_{i=1}^n(x_i-\bar{x})^2}
+\]</span></p>
+<p><span class="math display">\[
+SE(\hat{\beta}_0)^2 = \sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i-\bar{x})^2]}
+\]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Standard error has a reverse relation with number of training set.</p>
+<p>Noise in the data affects errors in all coefficients, and is directly proportional. (ie, 4x as much data will tend to reduce standard error by 2)</p>
+</div>
+</div>
+<p>Residual Standard Error = <span class="math inline">\(\sqrt{-\frac{RSS}{n-2}}\)</span></p>
+<p>Looking at RSE, it intuitively makes sense. We have the sum of squared residuals, so we need to square root to get back to just regular ol’ residuals. We also need to divide by <em>something</em> to account for the degrees of freedom, thus <span class="math inline">\(n-2\)</span>. <a href="https://stats.stackexchange.com/questions/204238/why-divide-rss-by-n-2-to-get-rse">Interested in why we divide by 2?</a> (tldr; residual degrees of freedom.)</p>
+<p>CONFIDENCE INTERVAL <span class="math inline">\(\hat{B_1} \pm 2SE(\hat{B_1})\)</span></p>
+<p>What is a confidence interval tho? <em>values that with 95% probability, the range will contain the true unknown value</em></p>
+<p>Here’s a thread to help understand:</p>
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+Hey Stats folk, what's your 280 character definition of a confidence interval?🤔
+</p>
+— Chelsea Parlett-Pelleriti (<span class="citation" data-cites="ChelseaParlett">@ChelseaParlett</span>) <a href="https://twitter.com/ChelseaParlett/status/973657698536366080?ref_src=twsrc%5Etfw">March 13, 2018</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<ul>
+<li><h2 id="key-takeaways" class="anchored">key takeaways:</h2></li>
+</ul>
+</section>
+<section id="hypothesis-testing" class="level2">
+<h2 class="anchored" data-anchor-id="hypothesis-testing">Hypothesis testing</h2>
+<p><span class="math inline">\(H_0:\)</span> There is no relation between X and Y, that is <span class="math inline">\(H_0:\beta_1=0\)</span> <span class="math inline">\(H_A:\)</span> There is some relationship between X and Y, that is <span class="math inline">\(H_A:\beta_1\ne0\)</span></p>
+<p>if <span class="math inline">\(\beta_1 = 0\)</span>,</p>
+<p>to test null, we do a <span class="math inline">\(t\)</span> statistic:</p>
+<p><span class="math display">\[
+t = \frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
+\]</span></p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>what is a p-value?</p>
+</div>
+</div>
+<p>a small p-value is good– it means our model is accurate</p>
+<p>a small p-value means we REJECT the NULL hypotheses, that is, there is SOME RELATION between X and Y</p>
+<p>having a large p-value– less likely there is a relation between X and Y</p>
+</section>
+<section id="assessing-overall-accuracy-of-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="assessing-overall-accuracy-of-the-model">Assessing overall accuracy of the model</h2>
+<p>RSE is used to either estimate the STANDARD ERROR of <span class="math inline">\(\beta_x\)</span> OR the accuracy of the overall model</p>
+<p>$ R^2 = = 1 - $ for how much variance is explained. A sanity check here: R^2 should always be [0,1]. As a model’s RSS shrinks, R^2 will get closer and closer to 1.</p>
+<p>We already know RSS and <span class="math inline">\(TSS = \sum_{i=1}^n(y_i-\bar{y})\)</span></p>
+</section>
+<section id="important-functions" class="level2">
+<h2 class="anchored" data-anchor-id="important-functions">Important functions</h2>
+<p><span class="math display">\[
+SE(\hat{\beta}_1)^2 = \frac{\theta^2}{\sum_{i=1}^n(x_i-\bar{x})^2}$
+\]</span></p>
+<p><span class="math display">\[
+SE(\hat{\beta}_0)^2 = \sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i-\bar{x})^2]}
+\]</span></p>
+<p><span class="math display">\[
+t = \frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
+\]</span></p>
+<p><span class="math display">\[
+R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS}
+\]</span></p>
+<p><span class="math display">\[
+RSE = \sqrt{-\frac{RSS}{n-2}}
+\]</span></p>
 
 
 </section>
+</section>
 
 </main> <!-- /main -->
-
-<script>
-  // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-  // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-  // slide changes (different for each slide format).
-  (function () {
-    function fireSlideChanged(previousSlide, currentSlide) {
-
-      // dispatch for htmlwidgets
-      const event = window.document.createEvent("Event");
-      event.initEvent("slideenter", true, true);
-      window.document.dispatchEvent(event);
-
-      // dispatch for shiny
-      if (window.jQuery) {
-        if (previousSlide) {
-          window.jQuery(previousSlide).trigger("hidden");
-        }
-        if (currentSlide) {
-          window.jQuery(currentSlide).trigger("shown");
-        }
-      }
-    }
-
-    // hookup for reveal
-    if (window.Reveal) {
-      window.Reveal.addEventListener("slidechanged", function(event) {
-        fireSlideChanged(event.previousSlide, event.currentSlide);
-      });
-    }
-
-    // hookup for slidy
-    if (window.w3c_slidy) {
-      window.w3c_slidy.add_observer(function (slide_num) {
-        // slide_num starts at position 1
-        fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-      });
-    }
-
-  })();
-</script>
-
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -370,8 +318,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      let href = ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

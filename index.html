@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.251">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -95,9 +100,11 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <a class="navbar-brand" href="./index.html">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">cap5765 notes</span>
-  </a>
+    </a>
+  </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -128,7 +135,7 @@ ul.task-list{list-style: none;}
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(10)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(12)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -140,7 +147,7 @@ ul.task-list{list-style: none;}
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1666114997620" data-listing-reading-time-sort="0.02">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1667320766295" data-listing-reading-time-sort="0.02">
 <div class="thumbnail">
 <a href="./posts/models-overview/models.html">
 <div class="thumbnail-image">
@@ -164,7 +171,74 @@ will collect and highlight
 <a href="./posts/models-overview/models.html"> </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="0.035">
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1667320766297" data-listing-reading-time-sort="0.04">
+<div class="thumbnail">
+<a href="./posts/week-4/week-4.html">
+<div class="thumbnail-image">
+
+</div>
+</a><p><a href="./posts/week-4/week-4.html"></a></p>
+</div>
+<div class="body">
+<a href="./posts/week-4/week-4.html">
+<h3 class="no-anchor listing-title">
+wk 4 recap
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+to be updated w notes (how to do tidymodels)
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-4/week-4.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1667320766297" data-listing-reading-time-sort="4.425">
+<div class="thumbnail">
+<p><a href="./posts/week-3/wk3-deeper-into-reg.html"> <img src="./posts/week-3/ridge.jpg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/week-3/wk3-deeper-into-reg.html">
+<h3 class="no-anchor listing-title">
+wk 3: deeper into regression
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+We understand linear regression, but we left with the FEAR OF EXPONENTIAL GROWTH given to us…as we get into mutliple regression, we have to compare <span class="math inline">\(2^P\)</span> (P being the number of variables) models.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-3/wk3-deeper-into-reg.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1667320766296" data-listing-reading-time-sort="3.845">
+<div class="thumbnail">
+<p><a href="./posts/week-2/wk2-cda-linear.html"> <img src="https://miro.medium.com/max/1400/1*N1-K-A43_98pYZ27fnupDA.jpeg" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/week-2/wk2-cda-linear.html">
+<h3 class="no-anchor listing-title">
+wk 2: linear regression
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+Linear regression is a fabulous place to start with statistical learning. The math is (relatively) simple, but it can feel like there’s a lot of moving parts if you’re new to all this. In general, we want to know 3 things this week about linear regression: create the best line possible, assess the coefficients and know if we did a good job.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-2/wk2-cda-linear.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1667320766298" data-listing-reading-time-sort="0.035">
 <div class="thumbnail">
 <a href="./posts/week-5/week-5.html">
 <div class="thumbnail-image">
@@ -189,126 +263,9 @@ to be updated with notes
 <a href="./posts/week-5/week-5.html"> </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="4.425">
+<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1667320766298" data-listing-reading-time-sort="3.675">
 <div class="thumbnail">
-<p><a href="./posts/week-3/wk3-deeper-into-reg.html"> <img src="./posts/week-3/ridge.jpg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/week-3/wk3-deeper-into-reg.html">
-<h3 class="no-anchor listing-title">
-wk 3: deeper into regression
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-We understand linear regression, but we left with the FEAR OF EXPONENTIAL GROWTH given to us…as we get into mutliple regression, we have to compare <span class="math inline">\(2^P\)</span> (P being the number of variables) models.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/week-3/wk3-deeper-into-reg.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1666114997620" data-listing-reading-time-sort="2.825">
-<div class="thumbnail">
-<p><a href="./posts/week-1/wk1-cda-intro.html"> <img src="https://e2eml.school/images/transformers/matrix_mult_three_row_two_col.png" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/week-1/wk1-cda-intro.html">
-<h3 class="no-anchor listing-title">
-wk 1: vocab and linear algebra
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-“A good model is one that accurately predicts the outcome.” (sometimes)
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/week-1/wk1-cda-intro.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="0.02">
-<div class="thumbnail">
-<a href="./posts/week-6/week-6.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/week-6/week-6.html"></a></p>
-</div>
-<div class="body">
-<a href="./posts/week-6/week-6.html">
-<h3 class="no-anchor listing-title">
-wk 6 recap
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-hurricane ian! no classes
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/week-6/week-6.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="0.04">
-<div class="thumbnail">
-<a href="./posts/week-8/week-8.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/week-8/week-8.html"></a></p>
-</div>
-<div class="body">
-<a href="./posts/week-8/week-8.html">
-<h3 class="no-anchor listing-title">
-wk 8 recap
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-week 8: midterm week!
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/week-8/week-8.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-listing-file-modified-sort="1666114997620" data-listing-reading-time-sort="3.845">
-<div class="thumbnail">
-<p><a href="./posts/week-2/wk2-cda-linear.html"> <img src="https://miro.medium.com/max/1400/1*N1-K-A43_98pYZ27fnupDA.jpeg" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/week-2/wk2-cda-linear.html">
-<h3 class="no-anchor listing-title">
-wk 2: linear regression
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Linear regression is a fabulous place to start with statistical learning. The math is (relatively) simple, but it can feel like there’s a lot of moving parts if you’re new to all this. In general, we want to know 3 things this week about linear regression: create the best line possible, assess the coefficients and know if we did a good job.
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/week-2/wk2-cda-linear.html"> </a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="2.375">
-<div class="thumbnail">
-<a href="./posts/week-9/lda-qda-knn.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/week-9/lda-qda-knn.html"></a></p>
+<p><a href="./posts/week-9/lda-qda-knn.html"> <img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Ftowardsdatascience.com%2F5-things-you-should-know-about-covariance-26b12a0516f1&amp;psig=AOvVaw0mAtlZPNx_RLXe8BObd1Q6&amp;ust=1666370659392000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCPjpncyg7_oCFQAAAAAdAAAAABAD" class="thumnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/week-9/lda-qda-knn.html">
@@ -327,7 +284,7 @@ knn is literally looking at a data point and peeking at the classifcations of it
 <a href="./posts/week-9/lda-qda-knn.html"> </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="2.98">
+<div class="quarto-post image-right" data-index="6" data-listing-file-modified-sort="1667320766298" data-listing-reading-time-sort="2.98">
 <div class="thumbnail">
 <a href="./posts/week-7/week-7.html">
 <div class="thumbnail-image">
@@ -352,29 +309,117 @@ Apologies for this week…its a little messy! Scratch notes for midterm review
 <a href="./posts/week-7/week-7.html"> </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-listing-file-modified-sort="1666114997624" data-listing-reading-time-sort="0.04">
+<div class="quarto-post image-right" data-index="7" data-listing-file-modified-sort="1667320766298" data-listing-reading-time-sort="0.02">
 <div class="thumbnail">
-<a href="./posts/week-4/week-4.html">
+<a href="./posts/week-6/week-6.html">
 <div class="thumbnail-image">
 
 </div>
-</a><p><a href="./posts/week-4/week-4.html"></a></p>
+</a><p><a href="./posts/week-6/week-6.html"></a></p>
 </div>
 <div class="body">
-<a href="./posts/week-4/week-4.html">
+<a href="./posts/week-6/week-6.html">
 <h3 class="no-anchor listing-title">
-wk 4 recap
+wk 6 recap
 </h3>
 <div class="listing-subtitle">
 
 </div>
 <div class="listing-description">
-to be updated w notes (how to do tidymodels)
+hurricane ian! no classes
 </div>
 </a>
 </div>
 <div class="metadata">
-<a href="./posts/week-4/week-4.html"> </a>
+<a href="./posts/week-6/week-6.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-listing-file-modified-sort="1667320766295" data-listing-reading-time-sort="2.825">
+<div class="thumbnail">
+<p><a href="./posts/week-1/wk1-cda-intro.html"> <img src="https://e2eml.school/images/transformers/matrix_mult_three_row_two_col.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/week-1/wk1-cda-intro.html">
+<h3 class="no-anchor listing-title">
+wk 1: vocab and linear algebra
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+“A good model is one that accurately predicts the outcome.” (sometimes)
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-1/wk1-cda-intro.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-listing-file-modified-sort="1667320766298" data-listing-reading-time-sort="0.04">
+<div class="thumbnail">
+<a href="./posts/week-8/week-8.html">
+<div class="thumbnail-image">
+
+</div>
+</a><p><a href="./posts/week-8/week-8.html"></a></p>
+</div>
+<div class="body">
+<a href="./posts/week-8/week-8.html">
+<h3 class="no-anchor listing-title">
+wk 8 recap
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+week 8: midterm week!
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-8/week-8.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="10" data-listing-file-modified-sort="1667320766295" data-listing-reading-time-sort="0.75">
+<div class="thumbnail">
+<p><a href="./posts/week-10/bootstrapping.html"> <img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.alpharithms.com%2Fstatistical-estimators-402811%2F&amp;psig=AOvVaw0ANBDiq2C4c8WEqXqnhcG1&amp;ust=1666804914823000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCJjl16jy-_oCFQAAAAAdAAAAABAD" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/week-10/bootstrapping.html">
+<h3 class="no-anchor listing-title">
+wk 10: bootstrapping
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+Resampling methods involve repeatedly drawing samples from a training set and refitting a model of interest on each sample in order to obtain additional information about the fitted model.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-10/bootstrapping.html"> </a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="11" data-listing-file-modified-sort="1667324594013" data-listing-reading-time-sort="0.6">
+<div class="thumbnail">
+<p><a href="./posts/week-11/tree-based.html"> <img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.researchgate.net%2Ffigure%2FThe-relation-between-Gini-impurity-Entropy-and-misclassification-error-22_fig3_357424165&amp;psig=AOvVaw2rY4NKeTmOBWkoa2bO1Eq9&amp;ust=1667410836591000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCLDOtMrDjfsCFQAAAAAdAAAAABAb" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/week-11/tree-based.html">
+<h3 class="no-anchor listing-title">
+wk 11: tree based
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+simple, yet powerful
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/week-11/tree-based.html"> </a>
 </div>
 </div>
 </div>
@@ -451,7 +496,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

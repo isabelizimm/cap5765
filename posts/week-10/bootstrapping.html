@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 6 recap</title>
+<title>cap5765 notes - wk 10: bootstrapping</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,6 +59,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -101,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 6 recap</h1>
+      <h1 class="title">wk 10: bootstrapping</h1>
                       </div>
   </div>
     
@@ -123,9 +124,32 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>hurricane ian! no classes</p>
+<section id="resampling" class="level1">
+<h1>Resampling</h1>
+<p>Resampling methods involve repeatedly drawing samples from a training set and refitting a model of interest on each sample in order to obtain additional information about the fitted model.</p>
+<p>Gives distribution of sample population</p>
+<p>common ways to</p>
+</section>
+<section id="bootstrap" class="level1">
+<h1>Bootstrap</h1>
+<p>The bootstrap is a widely applicable and extremely powerful statistical tool that can be used to quantify the uncertainty associated with a given estimator or statistical learning method</p>
+<p>bootstrapping was originally a method for assessing statistical accuracy of an estimator</p>
+<p><img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.alpharithms.com%2Fstatistical-estimators-402811%2F&amp;psig=AOvVaw0ANBDiq2C4c8WEqXqnhcG1&amp;ust=1666804914823000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCJjl16jy-_oCFQAAAAAdAAAAABAD" class="img-fluid"></p>
+<p>first, each bootstrap sample must be of the same size as the original sample second, each bookstrap sample must be taken <strong>with replacement</strong> from the original sample</p>
+<p>is bootstrapping considered simulated data? no– simulated would be new people. this is reusing people</p>
+<p>linear function</p>
+<p>Beer = <span class="math inline">\(\alpha\)</span> + <span class="math inline">\(\beta\)</span>(wings) | n=30</p>
+<ol type="1">
+<li>take sample n=30</li>
+<li>do regression to find <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span></li>
+<li>keep track of <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span></li>
+<li>do this 10,000 times</li>
+<li>plot distribution</li>
+</ol>
+<p>we end up with a bootstrap distribution for <span class="math inline">\(\hat{\beta}\)</span></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
