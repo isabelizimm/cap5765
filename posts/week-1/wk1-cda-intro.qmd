@@ -52,6 +52,7 @@ If you're like me and immediately think "oh yeah, I'm going to mae a computer do
 
 Python:
 ```{python}
+#| eval: false
 # python
 
 A = [[1,-1,1],[0,2,4]]
@@ -64,6 +65,7 @@ A+2*B # okay, this actually doesn't work
 ```
 R:
 ```{r}
+#| eval: false
 # R
 
 matrix1 <- matrix(c(3, 9, -1, 4, 2, 6), nrow = 2)

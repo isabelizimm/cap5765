@@ -2,19 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.35">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cap5765 notes - wk 2: deeper into linear regression</title>
+<title>cap5765 notes - wk 10: bootstrapping</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 
@@ -64,26 +69,29 @@ ul.task-list{list-style: none;}
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <a class="navbar-brand" href="../../index.html">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">cap5765 notes</span>
-  </a>
+    </a>
+  </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html">iz</a>
+    <a class="nav-link" href="../../about.html">
+ <span class="menu-text">iz</span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/isabelizimm"><i class="bi bi-github" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://twitter.com/isabelizimm"><i class="bi bi-twitter" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -95,7 +103,7 @@ ul.task-list{list-style: none;}
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">wk 2: deeper into linear regression</h1>
+      <h1 class="title">wk 10: bootstrapping</h1>
                       </div>
   </div>
     
@@ -103,6 +111,7 @@ ul.task-list{list-style: none;}
   <div class="quarto-title-meta">
 
       
+    
       
     </div>
     
@@ -117,58 +126,31 @@ ul.task-list{list-style: none;}
 
 
 
-<section id="linear-regression" class="level1">
-<h1>Linear regression</h1>
-<p>We <a href="../../posts/week-2/wk2-cda-linear.html">understand linear regression</a>, but we left with the FEAR OF EXPONENTIAL GROWTH given to us…as we get into mutliple regression, we have to compare <span class="math inline">\(2^P\)</span> (P being the number of variables) models.</p>
-<p><img src="aint%20nobody%20got%20time%20for%20that.png" class="img-fluid"></p>
-<p>https://counting.substack.com/p/what-if-you-were-an-evil-data-scientist</p>
-<section id="best-subset-all-subsets" class="level2">
-<h2 class="anchored" data-anchor-id="best-subset-all-subsets">Best subset, all subsets</h2>
-<p>Computer least squares fit for all possible subsets then choose between them. If we have 40 variables, this is computing BILLIONS OF MODELS. This is really expensive ()</p>
-<div class="callout-tip callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Algorithms can be GREEDY.</p>
-</div>
-</div>
-<p>start with Null subset, ie, <span class="math inline">\(y = \beta_0\)</span></p>
-<p>step 2 For <span class="math inline">\(K = 1, ... , p\)</span> fit all (p k) models that contain exactly k predictors</p>
-<p>K = 1: <span class="math inline">\(M_1: t = \beta_1 + \beta_1X_1\)</span> <span class="math inline">\(M_2: t = \beta_2 + \beta_2X_2\)</span> … <span class="math inline">\(M_{10}: t = \beta_{10} + \beta_{10}X_{10}\)</span></p>
-<p>step 3 select single best method among M_0</p>
+<section id="resampling" class="level1">
+<h1>Resampling</h1>
+<p>Resampling methods involve repeatedly drawing samples from a training set and refitting a model of interest on each sample in order to obtain additional information about the fitted model.</p>
+<p>Gives distribution of sample population</p>
+<p>common ways to</p>
 </section>
-<section id="forwards-backwards-sideways-upside-down" class="level2">
-<h2 class="anchored" data-anchor-id="forwards-backwards-sideways-upside-down">Forwards, backwards, sideways, upside down</h2>
-<p>Before the world of American Ninja Warrior, there was Wipeout!</p>
-<p>Forwards selection</p>
-<p>Backwards starts with all variables, remove variable with largest p-value</p>
-</section>
-<section id="important-functions" class="level2">
-<h2 class="anchored" data-anchor-id="important-functions">Important functions</h2>
-<p><span class="math display">\[
-SE(\hat{\beta}_1)^2 = \frac{\theta^2}{\sum_{i=1}^n(x_i-\bar{x})^2}$
-\]</span></p>
-<p><span class="math display">\[
-SE(\hat{\beta}_0)^2 = \sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i-\bar{x})^2]}
-\]</span></p>
-<p><span class="math display">\[
-t = \frac{\hat{\beta}_1-0}{SE(\hat{\beta}_1)}
-\]</span></p>
-<p><span class="math display">\[
-R^2 = \frac{TSS - RSS}{TSS} = 1 - \frac{RSS}{TSS}
-\]</span></p>
-<p><span class="math display">\[
-RSE = \sqrt{-\frac{RSS}{n-2}}
-\]</span></p>
+<section id="bootstrap" class="level1">
+<h1>Bootstrap</h1>
+<p>The bootstrap is a widely applicable and extremely powerful statistical tool that can be used to quantify the uncertainty associated with a given estimator or statistical learning method</p>
+<p>bootstrapping was originally a method for assessing statistical accuracy of an estimator</p>
+<p><img src="https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.alpharithms.com%2Fstatistical-estimators-402811%2F&amp;psig=AOvVaw0ANBDiq2C4c8WEqXqnhcG1&amp;ust=1666804914823000&amp;source=images&amp;cd=vfe&amp;ved=0CAwQjRxqFwoTCJjl16jy-_oCFQAAAAAdAAAAABAD" class="img-fluid"></p>
+<p>first, each bootstrap sample must be of the same size as the original sample second, each bookstrap sample must be taken <strong>with replacement</strong> from the original sample</p>
+<p>is bootstrapping considered simulated data? no– simulated would be new people. this is reusing people</p>
+<p>linear function</p>
+<p>Beer = <span class="math inline">\(\alpha\)</span> + <span class="math inline">\(\beta\)</span>(wings) | n=30</p>
+<ol type="1">
+<li>take sample n=30</li>
+<li>do regression to find <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span></li>
+<li>keep track of <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span></li>
+<li>do this 10,000 times</li>
+<li>plot distribution</li>
+</ol>
+<p>we end up with a bootstrap distribution for <span class="math inline">\(\hat{\beta}\)</span></p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -213,7 +195,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -241,31 +240,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
