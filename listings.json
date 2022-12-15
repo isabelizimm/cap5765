@@ -3,17 +3,12 @@
     "listing": "/index.html",
     "items": [
       "/posts/models-overview/models.html",
-      "/posts/week-4/week-4.html",
       "/posts/week-3/wk3-deeper-into-reg.html",
       "/posts/week-2/wk2-cda-linear.html",
-      "/posts/week-5/week-5.html",
       "/posts/week-9/lda-qda-knn.html",
       "/posts/week-7/week-7.html",
-      "/posts/week-6/week-6.html",
       "/posts/week-1/wk1-cda-intro.html",
-      "/posts/week-8/week-8.html",
-      "/posts/week-10/bootstrapping.html",
-      "/posts/week-11/tree-based.html"
+      "/posts/week-10/bootstrapping.html"
     ]
   }
 ]
